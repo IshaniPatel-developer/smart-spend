@@ -278,7 +278,12 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 _showErrorSnackBar('Scan failed: ${state.message}. You can still fill manually.');
               }
             },
-            child: SingleChildScrollView(
+            child: BlocBuilder<ReceiptBloc, ReceiptState>(
+              builder: (context, state) {
+                final isScanning = state is ReceiptScanningState;
+                return Stack(
+                  children: [
+                    SingleChildScrollView(
               padding: const EdgeInsets.all(20.0),
               child: Form(
                 key: _formKey,
@@ -610,11 +615,50 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
+            if (isScanning)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withOpacity(0.65),
+                  child: const Center(
+                    child: GlassCard(
+                      width: 250,
+                      height: 180,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(color: AppTheme.cyanAccent),
+                          SizedBox(height: 20),
+                          Text(
+                            'AI OCR Scanning...',
+                            style: TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Reading receipt details',
+                            style: TextStyle(
+                              color: AppTheme.textSecondary,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    ),
+  ),
+),
+),
+);
+}
 
   BoxFit coverOrContain(String path) {
     return BoxFit.cover;
