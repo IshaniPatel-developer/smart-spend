@@ -18,9 +18,9 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
   ExpenseFormBloc({
     required AddExpense addExpense,
     required UpdateExpense updateExpense,
-  })  : _addExpense = addExpense,
-        _updateExpense = updateExpense,
-        super(ExpenseFormState.initial()) {
+  }) : _addExpense = addExpense,
+       _updateExpense = updateExpense,
+       super(ExpenseFormState.initial()) {
     on<InitializeFormEvent>(_onInitializeForm);
     on<UpdateMerchantEvent>(_onUpdateMerchant);
     on<UpdateAmountEvent>(_onUpdateAmount);
@@ -32,35 +32,52 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
     on<SubmitFormEvent>(_onSubmitForm);
   }
 
-  void _onInitializeForm(InitializeFormEvent event, Emitter<ExpenseFormState> emit) {
+  void _onInitializeForm(
+    InitializeFormEvent event,
+    Emitter<ExpenseFormState> emit,
+  ) {
     final exp = event.expense;
     if (exp != null) {
-      emit(ExpenseFormState(
-        merchantName: exp.merchantName,
-        amount: exp.amount,
-        category: exp.category,
-        date: exp.date,
-        notes: exp.notes ?? '',
-        imagePath: exp.imagePath,
-        autofillSessionId: 'edit_${exp.id}_${DateTime.now().millisecondsSinceEpoch}',
-      ));
+      emit(
+        ExpenseFormState(
+          merchantName: exp.merchantName,
+          amount: exp.amount,
+          category: exp.category,
+          date: exp.date,
+          notes: exp.notes ?? '',
+          imagePath: exp.imagePath,
+          autofillSessionId:
+              'edit_${exp.id}_${DateTime.now().millisecondsSinceEpoch}',
+        ),
+      );
     } else {
-      emit(ExpenseFormState.initial(initialDate: DateTime.now()).copyWith(
-        imagePath: event.initialImagePath,
-        autofillSessionId: 'add_${DateTime.now().millisecondsSinceEpoch}',
-      ));
+      emit(
+        ExpenseFormState.initial(initialDate: DateTime.now()).copyWith(
+          imagePath: event.initialImagePath,
+          autofillSessionId: 'add_${DateTime.now().millisecondsSinceEpoch}',
+        ),
+      );
     }
   }
 
-  void _onUpdateMerchant(UpdateMerchantEvent event, Emitter<ExpenseFormState> emit) {
+  void _onUpdateMerchant(
+    UpdateMerchantEvent event,
+    Emitter<ExpenseFormState> emit,
+  ) {
     emit(state.copyWith(merchantName: event.merchantName));
   }
 
-  void _onUpdateAmount(UpdateAmountEvent event, Emitter<ExpenseFormState> emit) {
+  void _onUpdateAmount(
+    UpdateAmountEvent event,
+    Emitter<ExpenseFormState> emit,
+  ) {
     emit(state.copyWith(amount: event.amount));
   }
 
-  void _onUpdateCategory(UpdateCategoryEvent event, Emitter<ExpenseFormState> emit) {
+  void _onUpdateCategory(
+    UpdateCategoryEvent event,
+    Emitter<ExpenseFormState> emit,
+  ) {
     emit(state.copyWith(category: event.category));
   }
 
@@ -76,17 +93,25 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
     emit(state.copyWith(imagePath: event.imagePath));
   }
 
-  void _onAutofillFromReceipt(AutofillFromReceiptEvent event, Emitter<ExpenseFormState> emit) {
-    emit(state.copyWith(
-      merchantName: event.result.merchantName,
-      amount: event.result.amount,
-      category: event.result.category,
-      date: event.result.date,
-      autofillSessionId: 'autofill_${DateTime.now().millisecondsSinceEpoch}',
-    ));
+  void _onAutofillFromReceipt(
+    AutofillFromReceiptEvent event,
+    Emitter<ExpenseFormState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        merchantName: event.result.merchantName,
+        amount: event.result.amount,
+        category: event.result.category,
+        date: event.result.date,
+        autofillSessionId: 'autofill_${DateTime.now().millisecondsSinceEpoch}',
+      ),
+    );
   }
 
-  Future<void> _onSubmitForm(SubmitFormEvent event, Emitter<ExpenseFormState> emit) async {
+  Future<void> _onSubmitForm(
+    SubmitFormEvent event,
+    Emitter<ExpenseFormState> emit,
+  ) async {
     if (state.merchantName.trim().isEmpty) {
       emit(state.copyWith(errorMessage: 'Please enter a merchant name'));
       return;
@@ -264,11 +289,7 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
 
   void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.dangerAccent,
-        duration: const Duration(milliseconds: 1500),
-      ),
+      SnackBar(content: Text(message), backgroundColor: AppTheme.dangerAccent),
     );
   }
 }
