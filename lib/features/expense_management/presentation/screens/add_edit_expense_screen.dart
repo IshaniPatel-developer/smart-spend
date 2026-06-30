@@ -285,15 +285,22 @@ class AddEditExpenseScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-                                  SizedBox(
-                                    height: 48,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: _categories.length,
-                                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                                      itemBuilder: (context, index) {
-                                        final cat = _categories[index];
-                                        final isSelected = state.category == cat;
+                                  Builder(
+                                    builder: (context) {
+                                      final sortedCategories = List<String>.from(_categories);
+                                      if (sortedCategories.contains(state.category)) {
+                                        sortedCategories.remove(state.category);
+                                        sortedCategories.insert(0, state.category);
+                                      }
+                                      return SizedBox(
+                                        height: 48,
+                                        child: ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: sortedCategories.length,
+                                          separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                          itemBuilder: (context, index) {
+                                            final cat = sortedCategories[index];
+                                            final isSelected = state.category == cat;
 
                                         return ChoiceChip(
                                           label: Text(cat),
@@ -327,7 +334,9 @@ class AddEditExpenseScreen extends StatelessWidget {
                                         );
                                       },
                                     ),
-                                  ),
+                                  );
+                                },
+                              ),
                                   const SizedBox(height: 20),
 
                                   // Optional Notes Card
