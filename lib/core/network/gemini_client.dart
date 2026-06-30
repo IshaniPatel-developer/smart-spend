@@ -27,7 +27,7 @@ class GeminiClient {
       }
     }
     // Fallback/other platforms
-    return const String.fromEnvironment('GEMINI_API_KEY', defaultValue: 'AQ.Ab8RN6JiaelCFIanMx-z9vzbnzS3HcuURwxQdQSTO4ardhYUDg');
+    return const String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
   }
 
   /// Sends a post request with automatic model fallback in case of deprecations or high demand limits.
