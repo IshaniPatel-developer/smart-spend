@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import '../database/database_helper.dart';
 
 class GeminiClient {
@@ -14,8 +15,19 @@ class GeminiClient {
         _dbHelper = dbHelper ?? DatabaseHelper.instance;
 
   Future<String> _getApiKey() async {
-    // Return hardcoded API Key directly
-    return 'AQ.Ab8RN6JiaelCFIanMx-z9vzbnzS3HcuURwxQdQSTO4ardhYUDg';
+    if (Platform.isAndroid) {
+      try {
+        const channel = MethodChannel('com.smartspend.smart_spend/secrets');
+        final String? key = await channel.invokeMethod<String>('getGeminiApiKey');
+        if (key != null && key.isNotEmpty && key != "null") {
+          return key;
+        }
+      } catch (e) {
+        // Fallback
+      }
+    }
+    // Fallback/other platforms
+    return const String.fromEnvironment('GEMINI_API_KEY', defaultValue: 'AQ.Ab8RN6JiaelCFIanMx-z9vzbnzS3HcuURwxQdQSTO4ardhYUDg');
   }
 
   /// Sends a post request with automatic model fallback in case of deprecations or high demand limits.
