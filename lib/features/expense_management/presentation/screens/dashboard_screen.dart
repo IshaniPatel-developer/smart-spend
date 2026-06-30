@@ -60,7 +60,7 @@ class DashboardScreen extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (context) => SafeArea(
+      builder: (modalContext) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -84,7 +84,7 @@ class DashboardScreen extends StatelessWidget {
                     label: 'Camera',
                     color: AppTheme.cyanAccent,
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(modalContext);
                       _scanReceiptFromCameraOrGallery(context, ImageSource.camera);
                     },
                   ),
@@ -93,7 +93,7 @@ class DashboardScreen extends StatelessWidget {
                     label: 'Gallery',
                     color: AppTheme.primaryAccent,
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(modalContext);
                       _scanReceiptFromCameraOrGallery(context, ImageSource.gallery);
                     },
                   ),
