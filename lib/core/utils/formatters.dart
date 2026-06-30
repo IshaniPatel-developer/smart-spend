@@ -8,8 +8,7 @@ class Formatters {
 
   /// Formats double amount to standard Indian Rupees format
   static String formatRupee(double amount) {
-    final formatted = NumberFormat.currency(symbol: '₹').format(amount);
-    return formatted.length > 9 ? formatted.substring(0, 9) : formatted;
+    return NumberFormat.currency(symbol: '₹').format(amount);
   }
 
   /// Abbreviates large currency values (e.g. 5k, 1M, 2.5B)
