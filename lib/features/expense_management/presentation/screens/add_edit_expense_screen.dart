@@ -16,7 +16,7 @@ import '../../../receipt_scanner/presentation/bloc/receipt_bloc.dart';
 import '../../../receipt_scanner/presentation/bloc/receipt_state.dart';
 import '../widgets/glass_card.dart';
 
-class AddEditExpenseScreen extends StatelessWidget {
+class AddEditExpenseScreen extends StatefulWidget {
   final Expense? expense;
   final String? initialImagePath;
 
@@ -26,7 +26,14 @@ class AddEditExpenseScreen extends StatelessWidget {
     this.initialImagePath,
   });
 
-  static final _formKey = GlobalKey<FormState>();
+  @override
+  State<AddEditExpenseScreen> createState() => _AddEditExpenseScreenState();
+}
+
+class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _scrollController = ScrollController();
+
   static const List<String> _categories = [
     'Food',
     'Shopping',
@@ -37,12 +44,18 @@ class AddEditExpenseScreen extends StatelessWidget {
   ];
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isEditing = expense != null;
+    final isEditing = widget.expense != null;
 
     return BlocProvider<ExpenseFormBloc>(
       create: (context) => di.sl<ExpenseFormBloc>()
-        ..add(InitializeFormEvent(expense: expense, initialImagePath: initialImagePath)),
+        ..add(InitializeFormEvent(expense: widget.expense, initialImagePath: widget.initialImagePath)),
       child: Builder(
         builder: (context) {
           return BlocListener<ReceiptBloc, ReceiptState>(
@@ -295,6 +308,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                                       return SizedBox(
                                         height: 48,
                                         child: ListView.separated(
+                                          controller: _scrollController,
                                           scrollDirection: Axis.horizontal,
                                           itemCount: sortedCategories.length,
                                           separatorBuilder: (_, __) => const SizedBox(width: 8),
@@ -302,41 +316,46 @@ class AddEditExpenseScreen extends StatelessWidget {
                                             final cat = sortedCategories[index];
                                             final isSelected = state.category == cat;
 
-                                        return ChoiceChip(
-                                          label: Text(cat),
-                                          selected: isSelected,
-                                          onSelected: (selected) {
-                                            if (selected) {
-                                              context
-                                                  .read<ExpenseFormBloc>()
-                                                  .add(UpdateCategoryEvent(cat));
-                                            }
+                                            return ChoiceChip(
+                                              label: Text(cat),
+                                              selected: isSelected,
+                                              onSelected: (selected) {
+                                                if (selected) {
+                                                  context
+                                                      .read<ExpenseFormBloc>()
+                                                      .add(UpdateCategoryEvent(cat));
+                                                  _scrollController.animateTo(
+                                                    0.0,
+                                                    duration: const Duration(milliseconds: 300),
+                                                    curve: Curves.easeOut,
+                                                  );
+                                                }
+                                              },
+                                              selectedColor: AppTheme.primaryAccent,
+                                              backgroundColor: AppTheme.glassCardFill,
+                                              labelStyle: TextStyle(
+                                                color: isSelected
+                                                    ? Colors.white
+                                                    : AppTheme.textSecondary,
+                                                fontWeight: isSelected
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(12),
+                                                side: BorderSide(
+                                                  color: isSelected
+                                                      ? AppTheme.primaryAccent
+                                                      : AppTheme.borderLight,
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                            );
                                           },
-                                          selectedColor: AppTheme.primaryAccent,
-                                          backgroundColor: AppTheme.glassCardFill,
-                                          labelStyle: TextStyle(
-                                            color: isSelected
-                                                ? Colors.white
-                                                : AppTheme.textSecondary,
-                                            fontWeight: isSelected
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                            side: BorderSide(
-                                              color: isSelected
-                                                  ? AppTheme.primaryAccent
-                                                  : AppTheme.borderLight,
-                                              width: 1.5,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                   const SizedBox(height: 20),
 
                                   // Optional Notes Card
@@ -374,7 +393,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                                           : () {
                                               if (_formKey.currentState!.validate()) {
                                                 context.read<ExpenseFormBloc>().add(
-                                                      SubmitFormEvent(originalExpense: expense),
+                                                      SubmitFormEvent(originalExpense: widget.expense),
                                                     );
                                               }
                                             },
