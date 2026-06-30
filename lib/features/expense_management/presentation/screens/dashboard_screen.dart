@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/theme.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
-import '../../../receipt_scanner/presentation/bloc/receipt_bloc.dart';
-import '../../../receipt_scanner/presentation/bloc/receipt_event.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/category_chart.dart';
 import '../widgets/expense_list_item.dart';
@@ -18,128 +15,6 @@ import '../../../insights/presentation/screens/insights_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
-
-  static final _picker = ImagePicker();
-
-  Future<void> _scanReceiptFromCameraOrGallery(BuildContext context, ImageSource source) async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: source,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null && context.mounted) {
-        // Clear previous state and trigger scanning on the scanning bloc
-        context.read<ReceiptBloc>().add(ClearReceiptScanEvent());
-        context.read<ReceiptBloc>().add(ScanReceiptEvent(pickedFile.path));
-        
-        // Push the add_edit screen and pass the scan action forward
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddEditExpenseScreen(
-              initialImagePath: pickedFile.path,
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to pick image: $e'),
-          backgroundColor: AppTheme.dangerAccent,
-        ),
-      );
-    }
-  }
-
-  void _showScanReceiptSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppTheme.obsidianCard,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (modalContext) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'AI Receipt Scanner',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _actionColumnButton(
-                    icon: Icons.camera_alt,
-                    label: 'Camera',
-                    color: AppTheme.cyanAccent,
-                    onTap: () {
-                      Navigator.pop(modalContext);
-                      _scanReceiptFromCameraOrGallery(context, ImageSource.camera);
-                    },
-                  ),
-                  _actionColumnButton(
-                    icon: Icons.photo_library,
-                    label: 'Gallery',
-                    color: AppTheme.primaryAccent,
-                    onTap: () {
-                      Navigator.pop(modalContext);
-                      _scanReceiptFromCameraOrGallery(context, ImageSource.gallery);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _actionColumnButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 120,
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        decoration: BoxDecoration(
-          color: AppTheme.glassCardFill,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.borderLight),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 36, color: color),
-            const SizedBox(height: 10),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +198,7 @@ class DashboardScreen extends StatelessWidget {
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton.icon(
-                              onPressed: () => _showScanReceiptSheet(context),
+                              onPressed: () => context.read<ExpenseBloc>().showScanReceiptSheet(context),
                               icon: const Icon(Icons.document_scanner),
                               label: const Text('Scan Receipt'),
                             ),
