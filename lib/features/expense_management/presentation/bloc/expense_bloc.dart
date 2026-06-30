@@ -120,6 +120,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         SnackBar(
           content: Text('${AppStrings.failedToPickImage}$e'),
           backgroundColor: AppTheme.dangerAccent,
+          duration: const Duration(milliseconds: 1500),
         ),
       );
     }

@@ -53,6 +53,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                   const SnackBar(
                     content: Text(AppStrings.formAutofilledMessage),
                     backgroundColor: AppTheme.secondaryAccent,
+                    duration: Duration(milliseconds: 1500),
                   ),
                 );
               } else if (receiptState is ReceiptScanErrorState) {
@@ -72,6 +73,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                     SnackBar(
                       content: Text(isEditing ? AppStrings.transactionUpdatedMessage : AppStrings.transactionSavedMessage),
                       backgroundColor: AppTheme.secondaryAccent,
+                      duration: const Duration(milliseconds: 1500),
                     ),
                   );
                 } else if (state.errorMessage != null) {

@@ -264,7 +264,11 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
 
   void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: AppTheme.dangerAccent),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppTheme.dangerAccent,
+        duration: const Duration(milliseconds: 1500),
+      ),
     );
   }
 }
