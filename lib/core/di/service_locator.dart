@@ -12,6 +12,7 @@ import '../../features/expense_management/domain/usecases/add_expense.dart';
 import '../../features/expense_management/domain/usecases/update_expense.dart';
 import '../../features/expense_management/domain/usecases/delete_expense.dart';
 import '../../features/expense_management/presentation/bloc/expense_bloc.dart';
+import '../../features/expense_management/presentation/bloc/expense_form_bloc.dart';
 
 // Receipt Scanner Feature
 import '../../features/receipt_scanner/data/repository/receipt_repository_impl.dart';
@@ -90,6 +91,13 @@ Future<void> init() async {
   sl.registerFactory(
     () => InsightsBloc(
       generateInsights: sl(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => ExpenseFormBloc(
+      addExpense: sl(),
+      updateExpense: sl(),
     ),
   );
 }

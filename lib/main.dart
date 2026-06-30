@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/di/service_locator.dart' as di;
 import 'core/theme/theme.dart';
 import 'features/expense_management/presentation/bloc/expense_bloc.dart';
+import 'features/expense_management/presentation/bloc/expense_event.dart';
 import 'features/receipt_scanner/presentation/bloc/receipt_bloc.dart';
 import 'features/insights/presentation/bloc/insights_bloc.dart';
 import 'features/expense_management/presentation/screens/splash_screen.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ExpenseBloc>(
-          create: (context) => di.sl<ExpenseBloc>(),
+          create: (context) => di.sl<ExpenseBloc>()..add(LoadExpensesEvent()),
         ),
         BlocProvider<ReceiptBloc>(
           create: (context) => di.sl<ReceiptBloc>(),

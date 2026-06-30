@@ -16,31 +16,19 @@ import 'add_edit_expense_screen.dart';
 import '../../../insights/presentation/screens/insights_screen.dart';
 
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
+  static final _picker = ImagePicker();
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  final _picker = ImagePicker();
-
-  @override
-  void initState() {
-    super.initState();
-    // Load expenses initially
-    context.read<ExpenseBloc>().add(LoadExpensesEvent());
-  }
-
-  Future<void> _scanReceiptFromCameraOrGallery(ImageSource source) async {
+  Future<void> _scanReceiptFromCameraOrGallery(BuildContext context, ImageSource source) async {
     try {
       final XFile? pickedFile = await _picker.pickImage(
         source: source,
         imageQuality: 85,
       );
 
-      if (pickedFile != null && mounted) {
+      if (pickedFile != null && context.mounted) {
         // Clear previous state and trigger scanning on the scanning bloc
         context.read<ReceiptBloc>().add(ClearReceiptScanEvent());
         context.read<ReceiptBloc>().add(ScanReceiptEvent(pickedFile.path));
@@ -66,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _showScanReceiptSheet() {
+  void _showScanReceiptSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppTheme.obsidianCard,
@@ -98,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: AppTheme.cyanAccent,
                     onTap: () {
                       Navigator.pop(context);
-                      _scanReceiptFromCameraOrGallery(ImageSource.camera);
+                      _scanReceiptFromCameraOrGallery(context, ImageSource.camera);
                     },
                   ),
                   _actionColumnButton(
@@ -107,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: AppTheme.primaryAccent,
                     onTap: () {
                       Navigator.pop(context);
-                      _scanReceiptFromCameraOrGallery(ImageSource.gallery);
+                      _scanReceiptFromCameraOrGallery(context, ImageSource.gallery);
                     },
                   ),
                 ],
@@ -315,7 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton.icon(
-                              onPressed: _showScanReceiptSheet,
+                              onPressed: () => _showScanReceiptSheet(context),
                               icon: const Icon(Icons.document_scanner),
                               label: const Text('Scan Receipt'),
                             ),

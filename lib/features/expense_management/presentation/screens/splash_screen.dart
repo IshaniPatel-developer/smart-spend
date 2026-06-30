@@ -3,50 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/theme.dart';
 import 'dashboard_screen.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
-
-    // Start animating
-    _controller.forward();
-
-    // Navigate to Dashboard after 2.5 seconds
-    Timer(const Duration(milliseconds: 2500), _navigateToDashboard);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _navigateToDashboard() {
-    if (!mounted) return;
+  void _navigateToDashboard(BuildContext context) {
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
@@ -61,16 +21,26 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    // Trigger transition callback once the widget is laid out
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 2500), () {
+        _navigateToDashboard(context);
+      });
+    });
+
     return Scaffold(
       body: AppTheme.radialGradientBackground(
         child: Center(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
+          child: TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 1500),
+            tween: Tween<double>(begin: 0.0, end: 1.0),
+            curve: Curves.easeOutBack,
+            builder: (context, value, child) {
+              final scale = 0.8 + 0.2 * value;
               return Opacity(
-                opacity: _fadeAnimation.value,
+                opacity: value.clamp(0.0, 1.0),
                 child: Transform.scale(
-                  scale: _scaleAnimation.value,
+                  scale: scale,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -198,9 +168,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
       child: Stack(
         children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 2000),
-            curve: Curves.easeInOut,
+          Container(
             width: 140,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
