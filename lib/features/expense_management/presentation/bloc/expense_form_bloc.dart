@@ -39,8 +39,10 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
         autofillSessionId: 'edit_${exp.id}_${DateTime.now().millisecondsSinceEpoch}',
       ));
     } else {
-      emit(ExpenseFormState.initial(initialDate: DateTime.now())
-          .copyWith(autofillSessionId: 'add_${DateTime.now().millisecondsSinceEpoch}'));
+      emit(ExpenseFormState.initial(initialDate: DateTime.now()).copyWith(
+        imagePath: event.initialImagePath,
+        autofillSessionId: 'add_${DateTime.now().millisecondsSinceEpoch}',
+      ));
     }
   }
 

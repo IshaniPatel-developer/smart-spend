@@ -20,8 +20,13 @@ import '../widgets/glass_card.dart';
 
 class AddEditExpenseScreen extends StatelessWidget {
   final Expense? expense;
+  final String? initialImagePath;
 
-  const AddEditExpenseScreen({super.key, this.expense});
+  const AddEditExpenseScreen({
+    super.key,
+    this.expense,
+    this.initialImagePath,
+  });
 
   static final _formKey = GlobalKey<FormState>();
   static final _picker = ImagePicker();
@@ -181,46 +186,47 @@ class AddEditExpenseScreen extends StatelessWidget {
     final isEditing = expense != null;
 
     return BlocProvider<ExpenseFormBloc>(
-      create: (context) => di.sl<ExpenseFormBloc>()..add(InitializeFormEvent(expense: expense)),
+      create: (context) => di.sl<ExpenseFormBloc>()
+        ..add(InitializeFormEvent(expense: expense, initialImagePath: initialImagePath)),
       child: Builder(
         builder: (context) {
-          return BlocConsumer<ExpenseFormBloc, ExpenseFormState>(
-            listenWhen: (prev, curr) => prev.isSuccess != curr.isSuccess || curr.errorMessage != null,
-            listener: (context, state) {
-              if (state.isSuccess) {
-                context.read<ExpenseBloc>().add(LoadExpensesEvent());
-                Navigator.pop(context);
+          return BlocListener<ReceiptBloc, ReceiptState>(
+            listener: (context, receiptState) {
+              if (receiptState is ReceiptScannedState) {
+                context.read<ExpenseFormBloc>().add(AutofillFromReceiptEvent(receiptState.result));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(isEditing ? 'Transaction updated!' : 'Transaction saved!'),
+                  const SnackBar(
+                    content: Text('Form auto-filled by AI scanner!'),
                     backgroundColor: AppTheme.secondaryAccent,
                   ),
                 );
-              } else if (state.errorMessage != null) {
-                _showErrorSnackBar(context, state.errorMessage!);
+              } else if (receiptState is ReceiptScanErrorState) {
+                _showErrorSnackBar(
+                  context,
+                  'Scan failed: ${receiptState.message}. You can still fill manually.',
+                );
               }
             },
-            builder: (context, state) {
-              final formattedDate = Formatters.formatDate(state.date);
+            child: BlocConsumer<ExpenseFormBloc, ExpenseFormState>(
+              listenWhen: (prev, curr) => prev.isSuccess != curr.isSuccess || curr.errorMessage != null,
+              listener: (context, state) {
+                if (state.isSuccess) {
+                  context.read<ExpenseBloc>().add(LoadExpensesEvent());
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(isEditing ? 'Transaction updated!' : 'Transaction saved!'),
+                      backgroundColor: AppTheme.secondaryAccent,
+                    ),
+                  );
+                } else if (state.errorMessage != null) {
+                  _showErrorSnackBar(context, state.errorMessage!);
+                }
+              },
+              builder: (context, state) {
+                final formattedDate = Formatters.formatDate(state.date);
 
-              return BlocListener<ReceiptBloc, ReceiptState>(
-                listener: (context, receiptState) {
-                  if (receiptState is ReceiptScannedState) {
-                    context.read<ExpenseFormBloc>().add(AutofillFromReceiptEvent(receiptState.result));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Form auto-filled by AI scanner!'),
-                        backgroundColor: AppTheme.secondaryAccent,
-                      ),
-                    );
-                  } else if (receiptState is ReceiptScanErrorState) {
-                    _showErrorSnackBar(
-                      context,
-                      'Scan failed: ${receiptState.message}. You can still fill manually.',
-                    );
-                  }
-                },
-                child: Scaffold(
+                return Scaffold(
                   appBar: AppBar(
                     title: Text(isEditing ? 'EDIT EXPENSE' : 'ADD EXPENSE'),
                     actions: [
@@ -531,9 +537,9 @@ class AddEditExpenseScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         },
       ),

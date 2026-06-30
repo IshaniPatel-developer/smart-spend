@@ -5,7 +5,8 @@ abstract class ExpenseFormEvent {}
 
 class InitializeFormEvent extends ExpenseFormEvent {
   final Expense? expense;
-  InitializeFormEvent({this.expense});
+  final String? initialImagePath;
+  InitializeFormEvent({this.expense, this.initialImagePath});
 }
 
 class UpdateMerchantEvent extends ExpenseFormEvent {

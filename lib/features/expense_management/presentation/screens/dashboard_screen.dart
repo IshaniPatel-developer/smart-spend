@@ -38,8 +38,7 @@ class DashboardScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => AddEditExpenseScreen(
-              // The screen listens to ReceiptBloc and will auto-populate
-              // when the scan event finishes
+              initialImagePath: pickedFile.path,
             ),
           ),
         );
