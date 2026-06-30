@@ -201,7 +201,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   }
                 }
 
-                return SingleChildScrollView(
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800.0),
+                    child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                   child: Column(
@@ -452,6 +455,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               },
                             ),
                     ],
+                  ),
+                    ),
                   ),
                 );
               }

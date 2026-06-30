@@ -15,7 +15,7 @@ class GeminiClient {
 
   Future<String> _getApiKey() async {
     // Return hardcoded API Key directly
-    return 'AQ.Ab8RN6Lxnmhv_xFwGY7VwX_6s6BcRWi6ZTl0-hbBBjpz0qOwDw';
+    return 'AIzaSyCf-8a4CZ4LnJNgGlVD72hQNVwULF5yEkg';
   }
 
   /// Sends a post request with automatic model fallback in case of deprecations or high demand limits.

@@ -37,7 +37,10 @@ class InsightsScreen extends StatelessWidget {
 
               if (state is InsightsGeneratedState) {
                 final insights = state.insights;
-                return RefreshIndicator(
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800.0),
+                    child: RefreshIndicator(
                   onRefresh: () async {
                     context.read<InsightsBloc>().add(GenerateInsightsEvent(expenses));
                   },
@@ -170,6 +173,8 @@ class InsightsScreen extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+                  ),
                     ),
                   ),
                 );

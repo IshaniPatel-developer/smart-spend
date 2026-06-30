@@ -27,7 +27,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
   final _merchantController = TextEditingController();
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
-  
+
   DateTime _selectedDate = DateTime.now();
   String _selectedCategory = 'Food';
   String? _imagePath;
@@ -39,7 +39,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     'Travel',
     'Utilities',
     'Entertainment',
-    'Others'
+    'Others',
   ];
 
   final _picker = ImagePicker();
@@ -212,10 +212,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppTheme.dangerAccent,
-      ),
+      SnackBar(content: Text(message), backgroundColor: AppTheme.dangerAccent),
     );
   }
 
@@ -248,7 +245,9 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.expense != null;
-    final formattedDate = DateFormat('EEEE, MMM dd, yyyy').format(_selectedDate);
+    final formattedDate = DateFormat(
+      'EEEE, MMM dd, yyyy',
+    ).format(_selectedDate);
 
     return Scaffold(
       appBar: AppBar(
@@ -256,7 +255,10 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
         actions: [
           if (!isEditing)
             IconButton(
-              icon: const Icon(Icons.document_scanner, color: AppTheme.cyanAccent),
+              icon: const Icon(
+                Icons.document_scanner,
+                color: AppTheme.cyanAccent,
+              ),
               tooltip: 'Scan Receipt with AI',
               onPressed: _showImagePickerSourceSelector,
             ),
@@ -275,15 +277,15 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                   ),
                 );
               } else if (state is ReceiptScanErrorState) {
-                _showErrorSnackBar('Scan failed: ${state.message}. You can still fill manually.');
+                _showErrorSnackBar(
+                  'Scan failed: ${state.message}. You can still fill manually.',
+                );
               }
             },
-            child: BlocBuilder<ReceiptBloc, ReceiptState>(
-              builder: (context, state) {
-                final isScanning = state is ReceiptScanningState;
-                return Stack(
-                  children: [
-                    SingleChildScrollView(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800.0),
+                child: SingleChildScrollView(
               padding: const EdgeInsets.all(20.0),
               child: Form(
                 key: _formKey,
@@ -300,7 +302,9 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             decoration: BoxDecoration(
                               color: AppTheme.cyanAccent.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: AppTheme.cyanAccent.withOpacity(0.3)),
+                              border: Border.all(
+                                color: AppTheme.cyanAccent.withOpacity(0.3),
+                              ),
                             ),
                             child: const Row(
                               children: [
@@ -335,11 +339,18 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             decoration: BoxDecoration(
                               color: AppTheme.secondaryAccent.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: AppTheme.secondaryAccent.withOpacity(0.3)),
+                              border: Border.all(
+                                color: AppTheme.secondaryAccent.withOpacity(
+                                  0.3,
+                                ),
+                              ),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.check_circle_outline, color: AppTheme.secondaryAccent),
+                                const Icon(
+                                  Icons.check_circle_outline,
+                                  color: AppTheme.secondaryAccent,
+                                ),
                                 const SizedBox(width: 12),
                                 const Expanded(
                                   child: Text(
@@ -352,13 +363,17 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.close, size: 18, color: AppTheme.textSecondary),
+                                  icon: const Icon(
+                                    Icons.close,
+                                    size: 18,
+                                    color: AppTheme.textSecondary,
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       _isAutofilledByAI = false;
                                     });
                                   },
-                                )
+                                ),
                               ],
                             ),
                           );
@@ -399,7 +414,10 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.black.withOpacity(0.6),
                                 child: IconButton(
-                                  icon: const Icon(Icons.delete, color: AppTheme.dangerAccent),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: AppTheme.dangerAccent,
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       _imagePath = null;
@@ -439,12 +457,17 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                               labelText: 'Merchant Name',
                               prefixIcon: Icon(
                                 Icons.storefront,
-                                color: _isAutofilledByAI ? AppTheme.secondaryAccent : AppTheme.textSecondary,
+                                color: _isAutofilledByAI
+                                    ? AppTheme.secondaryAccent
+                                    : AppTheme.textSecondary,
                               ),
                               enabledBorder: _isAutofilledByAI
                                   ? OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: AppTheme.secondaryAccent, width: 1.5),
+                                      borderSide: const BorderSide(
+                                        color: AppTheme.secondaryAccent,
+                                        width: 1.5,
+                                      ),
                                     )
                                   : null,
                             ),
@@ -460,18 +483,25 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                           // Amount Field
                           TextFormField(
                             controller: _amountController,
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             style: const TextStyle(color: AppTheme.textPrimary),
                             decoration: InputDecoration(
                               labelText: 'Amount (\$)',
                               prefixIcon: Icon(
                                 Icons.attach_money,
-                                color: _isAutofilledByAI ? AppTheme.secondaryAccent : AppTheme.textSecondary,
+                                color: _isAutofilledByAI
+                                    ? AppTheme.secondaryAccent
+                                    : AppTheme.textSecondary,
                               ),
                               enabledBorder: _isAutofilledByAI
                                   ? OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(color: AppTheme.secondaryAccent, width: 1.5),
+                                      borderSide: const BorderSide(
+                                        color: AppTheme.secondaryAccent,
+                                        width: 1.5,
+                                      ),
                                     )
                                   : null,
                             ),
@@ -492,12 +522,17 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             onTap: () => _selectDate(context),
                             borderRadius: BorderRadius.circular(16),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 18,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppTheme.glassCardFill,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: _isAutofilledByAI ? AppTheme.secondaryAccent : AppTheme.borderLight,
+                                  color: _isAutofilledByAI
+                                      ? AppTheme.secondaryAccent
+                                      : AppTheme.borderLight,
                                   width: 1.5,
                                 ),
                               ),
@@ -505,7 +540,9 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                 children: [
                                   Icon(
                                     Icons.calendar_today,
-                                    color: _isAutofilledByAI ? AppTheme.secondaryAccent : AppTheme.textSecondary,
+                                    color: _isAutofilledByAI
+                                        ? AppTheme.secondaryAccent
+                                        : AppTheme.textSecondary,
                                     size: 20,
                                   ),
                                   const SizedBox(width: 12),
@@ -563,17 +600,22 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             selectedColor: AppTheme.primaryAccent,
                             backgroundColor: AppTheme.glassCardFill,
                             labelStyle: TextStyle(
-                              color: isSelected ? Colors.white : AppTheme.textSecondary,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSelected
+                                  ? Colors.white
+                                  : AppTheme.textSecondary,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                               side: BorderSide(
                                 color: isSelected
                                     ? AppTheme.primaryAccent
-                                    : (_isAutofilledByAI && cat == _selectedCategory
-                                        ? AppTheme.secondaryAccent
-                                        : AppTheme.borderLight),
+                                    : (_isAutofilledByAI &&
+                                              cat == _selectedCategory
+                                          ? AppTheme.secondaryAccent
+                                          : AppTheme.borderLight),
                                 width: 1.5,
                               ),
                             ),
@@ -594,7 +636,10 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             style: const TextStyle(color: AppTheme.textPrimary),
                             decoration: const InputDecoration(
                               labelText: 'Notes (Optional)',
-                              prefixIcon: Icon(Icons.notes, color: AppTheme.textSecondary),
+                              prefixIcon: Icon(
+                                Icons.notes,
+                                color: AppTheme.textSecondary,
+                              ),
                             ),
                           ),
                         ],
@@ -608,57 +653,22 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                       child: ElevatedButton.icon(
                         onPressed: _saveForm,
                         icon: const Icon(Icons.check),
-                        label: Text(isEditing ? 'Update Transaction' : 'Save Transaction'),
+                        label: Text(
+                          isEditing ? 'Update Transaction' : 'Save Transaction',
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            if (isScanning)
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withOpacity(0.65),
-                  child: const Center(
-                    child: GlassCard(
-                      width: 250,
-                      height: 180,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(color: AppTheme.cyanAccent),
-                          SizedBox(height: 20),
-                          Text(
-                            'AI OCR Scanning...',
-                            style: TextStyle(
-                              color: AppTheme.textPrimary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Reading receipt details',
-                            style: TextStyle(
-                              color: AppTheme.textSecondary,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+          ),
+        ),
+      ),
     ),
-  ),
-),
-),
-);
-}
+      ),
+    );
+  }
 
   BoxFit coverOrContain(String path) {
     return BoxFit.cover;

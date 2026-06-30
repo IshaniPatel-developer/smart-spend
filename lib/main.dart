@@ -5,7 +5,7 @@ import 'core/theme/theme.dart';
 import 'features/expense/presentation/bloc/expense_bloc.dart';
 import 'features/expense/presentation/bloc/receipt_bloc.dart';
 import 'features/expense/presentation/bloc/insights_bloc.dart';
-import 'features/expense/presentation/screens/dashboard_screen.dart';
+import 'features/expense/presentation/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         title: 'SmartSpend',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
-        home: const DashboardScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
