@@ -19,7 +19,7 @@ class InsightsRepositoryImpl implements InsightsRepository {
         categoryBreakdown: {},
         largestExpense: 'None',
         spendingTrends: 'No expense records found. Add expenses to get trends.',
-        recommendation: 'Add some expenses to get AI-powered recommendations.',
+        recommendation: 'Start tracking by adding your first transaction. An excellent way to begin is to record every single minor expense for 7 days to identify hidden spending leaks.',
         rawReportMarkdown: '### Spending Report\nNo transactions have been recorded yet. Please add transactions to generate spending insights.',
       );
     }
@@ -50,7 +50,7 @@ class InsightsRepositoryImpl implements InsightsRepository {
 
     final reportMarkdown = response['reportMarkdown']?.toString() ?? 'Failed to generate markdown report.';
     final spendingTrends = response['spendingTrends']?.toString() ?? 'Unable to determine spending trends.';
-    final recommendation = response['recommendation']?.toString() ?? 'Keep tracking your expenses to build habits.';
+    final recommendation = response['recommendation']?.toString() ?? 'Review your highest spending category this week and consider setting a 10% lower budget limit for it next week.';
 
     return SpendingInsights(
       totalSpending: total,
