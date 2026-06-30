@@ -1,7 +1,7 @@
 class AppStrings {
   // Common/General
   static const String appName = 'SMARTSPEND';
-  static const String dollar = '$';
+  static const String dollar = '\$';
   static const String rupee = '₹';
 
   // Splash Screen

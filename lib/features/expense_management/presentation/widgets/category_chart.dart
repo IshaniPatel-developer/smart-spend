@@ -24,13 +24,13 @@ class CategoryChart extends StatelessWidget {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Food':
-        return const Color(0xFFF59E0B); // Amber
+        return AppTheme.amberCategory; // Amber
       case 'Shopping':
-        return const Color(0xFFEC4899); // Pink
+        return AppTheme.pinkCategory; // Pink
       case 'Travel':
-        return const Color(0xFF3B82F6); // Blue
+        return AppTheme.blueCategory; // Blue
       case 'Utilities':
-        return const Color(0xFFFBBF24); // Yellow
+        return AppTheme.yellowCategory; // Yellow
       case 'Entertainment':
         return AppTheme.primaryAccent; // Violet
       case 'Others':
