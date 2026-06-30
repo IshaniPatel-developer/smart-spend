@@ -137,7 +137,10 @@ class ExpenseListItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-                      Row(
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 6,
+                        runSpacing: 4,
                         children: [
                           Text(
                             expense.category,
@@ -147,12 +150,10 @@ class ExpenseListItem extends StatelessWidget {
                               color: color,
                             ),
                           ),
-                          const SizedBox(width: 6),
                           const Text(
                             '•',
                             style: TextStyle(color: AppTheme.textSecondary, fontSize: 10),
                           ),
-                          const SizedBox(width: 6),
                           Text(
                             formattedDate,
                             style: const TextStyle(
