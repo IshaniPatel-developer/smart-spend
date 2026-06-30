@@ -31,57 +31,43 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       body: AppTheme.radialGradientBackground(
         child: Center(
-          child: TweenAnimationBuilder<double>(
-            duration: const Duration(milliseconds: 1500),
-            tween: Tween<double>(begin: 0.0, end: 1.0),
-            curve: Curves.easeOutBack,
-            builder: (context, value, child) {
-              final scale = 0.8 + 0.2 * value;
-              return Opacity(
-                opacity: value.clamp(0.0, 1.0),
-                child: Transform.scale(
-                  scale: scale,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Styled Custom App Logo
-                      _buildLogo(),
-                      const SizedBox(height: 24),
-                      // App Name
-                      const Text(
-                        'SMARTSPEND',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 8,
-                          color: AppTheme.textPrimary,
-                          shadows: [
-                            Shadow(
-                              color: AppTheme.primaryAccent,
-                              blurRadius: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Subtitle
-                      Text(
-                        'AI-Powered Expense Management',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 2,
-                          color: AppTheme.textSecondary.withOpacity(0.8),
-                        ),
-                      ),
-                      const SizedBox(height: 60),
-                      // Glow loading bar
-                      _buildLoadingIndicator(),
-                    ],
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Styled Custom App Logo
+              _buildLogo(),
+              const SizedBox(height: 24),
+              // App Name
+              const Text(
+                'SMARTSPEND',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 8,
+                  color: AppTheme.textPrimary,
+                  shadows: [
+                    Shadow(
+                      color: AppTheme.primaryAccent,
+                      blurRadius: 20,
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+              const SizedBox(height: 8),
+              // Subtitle
+              Text(
+                'AI-Powered Expense Management',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 2,
+                  color: AppTheme.textSecondary.withOpacity(0.8),
+                ),
+              ),
+              const SizedBox(height: 60),
+              // Glow loading bar
+              _buildLoadingIndicator(),
+            ],
           ),
         ),
       ),
