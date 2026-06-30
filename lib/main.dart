@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/di/service_locator.dart' as di;
 import 'core/theme/theme.dart';
-import 'features/expense/presentation/bloc/expense_bloc.dart';
-import 'features/expense/presentation/bloc/receipt_bloc.dart';
-import 'features/expense/presentation/bloc/insights_bloc.dart';
-import 'features/expense/presentation/screens/splash_screen.dart';
+import 'features/expense_management/presentation/bloc/expense_bloc.dart';
+import 'features/receipt_scanner/presentation/bloc/receipt_bloc.dart';
+import 'features/insights/presentation/bloc/insights_bloc.dart';
+import 'features/expense_management/presentation/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

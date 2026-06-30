@@ -2,18 +2,28 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import '../database/database_helper.dart';
 import '../network/gemini_client.dart';
-import '../../features/expense/data/datasource/expense_local_datasource.dart';
-import '../../features/expense/data/repository/expense_repository_impl.dart';
-import '../../features/expense/domain/repository/expense_repository.dart';
-import '../../features/expense/domain/usecases/get_expenses.dart';
-import '../../features/expense/domain/usecases/add_expense.dart';
-import '../../features/expense/domain/usecases/update_expense.dart';
-import '../../features/expense/domain/usecases/delete_expense.dart';
-import '../../features/expense/domain/usecases/scan_receipt_usecase.dart';
-import '../../features/expense/domain/usecases/generate_insights_usecase.dart';
-import '../../features/expense/presentation/bloc/expense_bloc.dart';
-import '../../features/expense/presentation/bloc/receipt_bloc.dart';
-import '../../features/expense/presentation/bloc/insights_bloc.dart';
+
+// Expense Management Feature
+import '../../features/expense_management/data/datasource/expense_local_datasource.dart';
+import '../../features/expense_management/data/repository/expense_repository_impl.dart';
+import '../../features/expense_management/domain/repository/expense_repository.dart';
+import '../../features/expense_management/domain/usecases/get_expenses.dart';
+import '../../features/expense_management/domain/usecases/add_expense.dart';
+import '../../features/expense_management/domain/usecases/update_expense.dart';
+import '../../features/expense_management/domain/usecases/delete_expense.dart';
+import '../../features/expense_management/presentation/bloc/expense_bloc.dart';
+
+// Receipt Scanner Feature
+import '../../features/receipt_scanner/data/repository/receipt_repository_impl.dart';
+import '../../features/receipt_scanner/domain/repository/receipt_repository.dart';
+import '../../features/receipt_scanner/domain/usecases/scan_receipt_usecase.dart';
+import '../../features/receipt_scanner/presentation/bloc/receipt_bloc.dart';
+
+// Insights Feature
+import '../../features/insights/data/repository/insights_repository_impl.dart';
+import '../../features/insights/domain/repository/insights_repository.dart';
+import '../../features/insights/domain/usecases/generate_insights_usecase.dart';
+import '../../features/insights/presentation/bloc/insights_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -38,6 +48,17 @@ Future<void> init() async {
   sl.registerLazySingleton<ExpenseRepository>(
     () => ExpenseRepositoryImpl(
       localDataSource: sl(),
+    ),
+  );
+  
+  sl.registerLazySingleton<ReceiptRepository>(
+    () => ReceiptRepositoryImpl(
+      geminiClient: sl(),
+    ),
+  );
+  
+  sl.registerLazySingleton<InsightsRepository>(
+    () => InsightsRepositoryImpl(
       geminiClient: sl(),
     ),
   );
