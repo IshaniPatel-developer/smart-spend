@@ -1,4 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../receipt_scanner/presentation/bloc/receipt_bloc.dart';
+import '../../../receipt_scanner/presentation/bloc/receipt_event.dart';
 import '../../domain/entities/expense.dart';
 import '../../domain/usecases/add_expense.dart';
 import '../../domain/usecases/update_expense.dart';
@@ -119,5 +125,146 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
     } catch (e) {
       emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
     }
+  }
+
+  // UI helpers inside ExpenseFormBloc
+  Future<void> selectDate(BuildContext context, DateTime currentDate) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: AppTheme.primaryAccent,
+              onPrimary: Colors.white,
+              surface: AppTheme.obsidianCard,
+              onSurface: AppTheme.textPrimary,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != currentDate) {
+      add(UpdateDateEvent(picked));
+    }
+  }
+
+  static final _picker = ImagePicker();
+
+  Future<void> pickImage(BuildContext context, ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null && context.mounted) {
+        add(UpdateImageEvent(pickedFile.path));
+        context.read<ReceiptBloc>().add(ScanReceiptEvent(pickedFile.path));
+      }
+    } catch (e) {
+      showErrorSnackBar(context, '${AppStrings.failedToPickImage}$e');
+    }
+  }
+
+  void showImagePickerSourceSelector(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppTheme.obsidianCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (modalContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                AppStrings.scannerSheetTitle,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _actionColumnButton(
+                    context: modalContext,
+                    outerContext: context,
+                    icon: Icons.camera_alt,
+                    label: AppStrings.cameraLabel,
+                    color: AppTheme.cyanAccent,
+                    source: ImageSource.camera,
+                  ),
+                  _actionColumnButton(
+                    context: modalContext,
+                    outerContext: context,
+                    icon: Icons.photo_library,
+                    label: AppStrings.galleryLabel,
+                    color: AppTheme.primaryAccent,
+                    source: ImageSource.gallery,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _actionColumnButton({
+    required BuildContext context,
+    required BuildContext outerContext,
+    required IconData icon,
+    required String label,
+    required Color color,
+    required ImageSource source,
+  }) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+        pickImage(outerContext, source);
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: 120,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        decoration: BoxDecoration(
+          color: AppTheme.glassCardFill,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.borderLight),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 36, color: color),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showErrorSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: AppTheme.dangerAccent),
+    );
   }
 }

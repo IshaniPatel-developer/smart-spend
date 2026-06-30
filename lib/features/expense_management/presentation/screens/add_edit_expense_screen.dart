@@ -1,21 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/di/service_locator.dart' as di;
 import '../../domain/entities/expense.dart';
-import '../../../receipt_scanner/domain/entities/receipt_scan_result.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_form_bloc.dart';
 import '../bloc/expense_form_event.dart';
 import '../bloc/expense_form_state.dart';
 import '../../../receipt_scanner/presentation/bloc/receipt_bloc.dart';
-import '../../../receipt_scanner/presentation/bloc/receipt_event.dart';
 import '../../../receipt_scanner/presentation/bloc/receipt_state.dart';
 import '../widgets/glass_card.dart';
 
@@ -30,7 +27,6 @@ class AddEditExpenseScreen extends StatelessWidget {
   });
 
   static final _formKey = GlobalKey<FormState>();
-  static final _picker = ImagePicker();
   static const List<String> _categories = [
     'Food',
     'Shopping',
@@ -39,148 +35,6 @@ class AddEditExpenseScreen extends StatelessWidget {
     'Entertainment',
     'Others',
   ];
-
-  Future<void> _selectDate(BuildContext context, DateTime currentDate) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppTheme.primaryAccent,
-              onPrimary: Colors.white,
-              surface: AppTheme.obsidianCard,
-              onSurface: AppTheme.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != currentDate) {
-      context.read<ExpenseFormBloc>().add(UpdateDateEvent(picked));
-    }
-  }
-
-  Future<void> _pickImage(BuildContext context, ImageSource source) async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: source,
-        imageQuality: 85,
-      );
-
-      if (pickedFile != null) {
-        context.read<ExpenseFormBloc>().add(UpdateImageEvent(pickedFile.path));
-        context.read<ReceiptBloc>().add(ScanReceiptEvent(pickedFile.path));
-      }
-    } catch (e) {
-      _showErrorSnackBar(context, '${AppStrings.failedToPickImage}$e');
-    }
-  }
-
-  void _showImagePickerSourceSelector(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppTheme.obsidianCard,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (modalContext) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                AppStrings.scannerSheetTitle,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(modalContext);
-                      _pickImage(context, ImageSource.camera);
-                    },
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      width: 120,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        color: AppTheme.glassCardFill,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppTheme.borderLight),
-                      ),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.camera_alt, size: 36, color: AppTheme.cyanAccent),
-                          const SizedBox(height: 10),
-                          Text(
-                            AppStrings.cameraLabel,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(modalContext);
-                      _pickImage(context, ImageSource.gallery);
-                    },
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      width: 120,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        color: AppTheme.glassCardFill,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppTheme.borderLight),
-                      ),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.photo_library, size: 36, color: AppTheme.primaryAccent),
-                          const SizedBox(height: 10),
-                          Text(
-                            AppStrings.galleryLabel,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: AppTheme.dangerAccent),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +56,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                   ),
                 );
               } else if (receiptState is ReceiptScanErrorState) {
-                _showErrorSnackBar(
+                context.read<ExpenseFormBloc>().showErrorSnackBar(
                   context,
                   '${AppStrings.scanFailedFallbackMessage}${receiptState.message}${AppStrings.scanFailedSuffix}',
                 );
@@ -221,7 +75,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                     ),
                   );
                 } else if (state.errorMessage != null) {
-                  _showErrorSnackBar(context, state.errorMessage!);
+                  context.read<ExpenseFormBloc>().showErrorSnackBar(context, state.errorMessage!);
                 }
               },
               builder: (context, state) {
@@ -237,7 +91,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                             Icons.document_scanner,
                             color: AppTheme.cyanAccent,
                           ),
-                          onPressed: () => _showImagePickerSourceSelector(context),
+                          onPressed: () => context.read<ExpenseFormBloc>().showImagePickerSourceSelector(context),
                         ),
                     ],
                   ),
@@ -375,7 +229,7 @@ class AddEditExpenseScreen extends StatelessWidget {
 
                                         // Date Field
                                         InkWell(
-                                          onTap: () => _selectDate(context, state.date),
+                                          onTap: () => context.read<ExpenseFormBloc>().selectDate(context, state.date),
                                           borderRadius: BorderRadius.circular(16),
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
