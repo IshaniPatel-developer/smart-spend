@@ -3,6 +3,7 @@ class AppStrings {
   static const String appName = 'SMARTSPEND';
   static const String dollar = '\$';
   static const String rupee = '₹';
+  static const String noInternetConnectionMessage = 'No internet connection. Please check your connectivity and try again.';
 
   // Splash Screen
   static const String splashTagline = 'AI-Powered Expense Management';

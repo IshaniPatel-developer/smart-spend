@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/network_info.dart';
 import '../../domain/usecases/scan_receipt_usecase.dart';
 import 'receipt_event.dart';
 import 'receipt_state.dart';
@@ -19,6 +21,10 @@ class ReceiptBloc extends Bloc<ReceiptEvent, ReceiptState> {
     Emitter<ReceiptState> emit,
   ) async {
     emit(ReceiptScanningState());
+    if (!await NetworkInfo.isConnected) {
+      emit(ReceiptScanErrorState(AppStrings.noInternetConnectionMessage));
+      return;
+    }
     try {
       final result = await _scanReceipt(event.imagePath);
       emit(ReceiptScannedState(result));
