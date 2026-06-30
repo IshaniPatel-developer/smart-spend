@@ -16,8 +16,8 @@ class RupeeAmountText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fullText = Formatters.formatRupee(amount);
-    if (fullText.length > 12) {
-      final truncatedText = '${fullText.substring(0, 9)}...';
+    if (fullText.length > 13) {
+      final truncatedText = '${fullText.substring(0, 10)}...';
       return Tooltip(
         message: fullText,
         triggerMode: TooltipTriggerMode.tap,
