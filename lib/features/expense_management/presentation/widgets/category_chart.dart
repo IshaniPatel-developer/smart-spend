@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../widgets/rupee_amount_text.dart';
 import '../../domain/entities/expense.dart';
 
@@ -85,7 +86,7 @@ class CategoryChart extends StatelessWidget {
           children: [
             const Expanded(
               child: Text(
-                'Category Breakdown',
+                AppStrings.categoryBreakdownTitle,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -104,7 +105,7 @@ class CategoryChart extends StatelessWidget {
                   ),
                 ),
                 const Text(
-                  ' Total',
+                  AppStrings.totalSuffix,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -185,7 +186,7 @@ class CategoryChart extends StatelessWidget {
                               color: color.withOpacity(0.4),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
-                            )
+                            ),
                           ],
                         ),
                       ),

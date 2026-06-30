@@ -13,6 +13,16 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF9CA3AF);
   static const Color borderLight = Color(0xFF2D2A4A);
 
+  // Category Colors
+  static const Color amberCategory = Color(0xFFF59E0B);
+  static const Color pinkCategory = Color(0xFFEC4899);
+  static const Color blueCategory = Color(0xFF3B82F6);
+  static const Color yellowCategory = Color(0xFFFBBF24);
+
+  // Tooltip Colors
+  static const Color tooltipBg = Color(0xFF1E293B);
+  static const Color tooltipBorder = Color(0xFF334155);
+
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
@@ -39,17 +49,37 @@ class AppTheme {
         iconTheme: IconThemeData(color: textPrimary),
       ),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: textPrimary, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: -0.5),
-        headlineMedium: TextStyle(color: textPrimary, fontSize: 24, fontWeight: FontWeight.bold),
-        titleLarge: TextStyle(color: textPrimary, fontSize: 18, fontWeight: FontWeight.w600),
-        titleMedium: TextStyle(color: textPrimary, fontSize: 16, fontWeight: FontWeight.w500),
+        headlineLarge: TextStyle(
+          color: textPrimary,
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          letterSpacing: -0.5,
+        ),
+        headlineMedium: TextStyle(
+          color: textPrimary,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: TextStyle(
+          color: textPrimary,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+        titleMedium: TextStyle(
+          color: textPrimary,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
         bodyLarge: TextStyle(color: textPrimary, fontSize: 15),
         bodyMedium: TextStyle(color: textSecondary, fontSize: 14),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: glassCardFill,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 16,
+        ),
         labelStyle: const TextStyle(color: textSecondary, fontSize: 14),
         hintStyle: const TextStyle(color: textSecondary, fontSize: 14),
         enabledBorder: OutlineInputBorder(
@@ -102,11 +132,7 @@ class AppTheme {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF0A0914),
-            Color(0xFF140E28),
-            Color(0xFF090710),
-          ],
+          colors: [Color(0xFF0A0914), Color(0xFF140E28), Color(0xFF090710)],
         ),
       ),
       child: child,

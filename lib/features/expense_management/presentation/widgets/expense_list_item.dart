@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../domain/entities/expense.dart';
 import 'rupee_amount_text.dart';
@@ -20,13 +21,13 @@ class ExpenseListItem extends StatelessWidget {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Food':
-        return const Color(0xFFF59E0B);
+        return AppTheme.amberCategory;
       case 'Shopping':
-        return const Color(0xFFEC4899);
+        return AppTheme.pinkCategory;
       case 'Travel':
-        return const Color(0xFF3B82F6);
+        return AppTheme.blueCategory;
       case 'Utilities':
-        return const Color(0xFFFBBF24);
+        return AppTheme.yellowCategory;
       case 'Entertainment':
         return AppTheme.primaryAccent;
       case 'Others':
@@ -70,7 +71,11 @@ class ExpenseListItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppTheme.dangerAccent.withOpacity(0.5)),
         ),
-        child: const Icon(Icons.delete_sweep, color: AppTheme.dangerAccent, size: 28),
+        child: const Icon(
+          Icons.delete_sweep,
+          color: AppTheme.dangerAccent,
+          size: 28,
+        ),
       ),
       onDismissed: (_) => onDelete(),
       confirmDismiss: (direction) async {
@@ -78,21 +83,34 @@ class ExpenseListItem extends StatelessWidget {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: AppTheme.obsidianCard,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text('Delete Expense?', style: TextStyle(fontWeight: FontWeight.bold)),
-            content: Text('Are you sure you want to remove this expense of ${Formatters.formatRupee(expense.amount)} at ${expense.merchantName}?'),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Text(
+              AppStrings.deleteExpenseTitle,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: Text(
+              '${AppStrings.deleteExpenseConfirmBase}${Formatters.formatRupee(expense.amount)}${AppStrings.deleteExpenseConfirmAt}${expense.merchantName}${AppStrings.deleteExpenseConfirmQuestion}',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Cancel', style: TextStyle(color: AppTheme.textSecondary)),
+                child: const Text(
+                  AppStrings.cancelLabel,
+                  style: TextStyle(color: AppTheme.textSecondary),
+                ),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(true),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.dangerAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                 ),
-                child: const Text('Delete'),
+                child: const Text(AppStrings.deleteLabel),
               ),
             ],
           ),
@@ -154,7 +172,10 @@ class ExpenseListItem extends StatelessWidget {
                           ),
                           const Text(
                             '•',
-                            style: TextStyle(color: AppTheme.textSecondary, fontSize: 10),
+                            style: TextStyle(
+                              color: AppTheme.textSecondary,
+                              fontSize: 10,
+                            ),
                           ),
                           Text(
                             formattedDate,
@@ -165,7 +186,8 @@ class ExpenseListItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      if (expense.notes != null && expense.notes!.isNotEmpty) ...[
+                      if (expense.notes != null &&
+                          expense.notes!.isNotEmpty) ...[
                         const SizedBox(height: 4),
                         Text(
                           expense.notes!,
@@ -193,14 +215,15 @@ class ExpenseListItem extends StatelessWidget {
                         color: AppTheme.textPrimary,
                       ),
                     ),
-                    if (expense.imagePath != null && expense.imagePath!.isNotEmpty) ...[
+                    if (expense.imagePath != null &&
+                        expense.imagePath!.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       const Icon(
                         Icons.receipt_long,
                         size: 14,
                         color: AppTheme.cyanAccent,
                       ),
-                    ]
+                    ],
                   ],
                 ),
               ],

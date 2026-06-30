@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../receipt_scanner/presentation/bloc/receipt_bloc.dart';
 import '../../../receipt_scanner/presentation/bloc/receipt_event.dart';
 import '../screens/add_edit_expense_screen.dart';
@@ -117,7 +118,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to pick image: $e'),
+          content: Text('${AppStrings.failedToPickImage}$e'),
           backgroundColor: AppTheme.dangerAccent,
         ),
       );
@@ -139,7 +140,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'AI Receipt Scanner',
+                AppStrings.scannerSheetTitle,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -154,7 +155,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
                     context: modalContext,
                     outerContext: context,
                     icon: Icons.camera_alt,
-                    label: 'Camera',
+                    label: AppStrings.cameraLabel,
                     color: AppTheme.cyanAccent,
                     source: ImageSource.camera,
                   ),
@@ -162,7 +163,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
                     context: modalContext,
                     outerContext: context,
                     icon: Icons.photo_library,
-                    label: 'Gallery',
+                    label: AppStrings.galleryLabel,
                     color: AppTheme.primaryAccent,
                     source: ImageSource.gallery,
                   ),

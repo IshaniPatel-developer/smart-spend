@@ -10,7 +10,8 @@ class SplashScreen extends StatelessWidget {
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const DashboardScreen(),
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const DashboardScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
@@ -46,10 +47,7 @@ class SplashScreen extends StatelessWidget {
                   letterSpacing: 8,
                   color: AppTheme.textPrimary,
                   shadows: [
-                    Shadow(
-                      color: AppTheme.primaryAccent,
-                      blurRadius: 20,
-                    ),
+                    Shadow(color: AppTheme.primaryAccent, blurRadius: 20),
                   ],
                 ),
               ),
@@ -82,10 +80,7 @@ class SplashScreen extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(
-          colors: [
-            AppTheme.primaryAccent.withOpacity(0.3),
-            Colors.transparent,
-          ],
+          colors: [AppTheme.primaryAccent.withOpacity(0.3), Colors.transparent],
           radius: 0.8,
         ),
       ),
@@ -99,10 +94,7 @@ class SplashScreen extends StatelessWidget {
               height: size * 0.8,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppTheme.primaryAccent,
-                  width: 3.5,
-                ),
+                border: Border.all(color: AppTheme.primaryAccent, width: 3.5),
                 boxShadow: [
                   BoxShadow(
                     color: AppTheme.primaryAccent.withOpacity(0.4),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/di/service_locator.dart' as di;
@@ -76,7 +77,7 @@ class AddEditExpenseScreen extends StatelessWidget {
         context.read<ReceiptBloc>().add(ScanReceiptEvent(pickedFile.path));
       }
     } catch (e) {
-      _showErrorSnackBar(context, 'Failed to pick image: $e');
+      _showErrorSnackBar(context, '${AppStrings.failedToPickImage}$e');
     }
   }
 
@@ -95,7 +96,7 @@ class AddEditExpenseScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Scan Receipt',
+                AppStrings.scannerSheetTitle,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -125,7 +126,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                           Icon(Icons.camera_alt, size: 36, color: AppTheme.cyanAccent),
                           const SizedBox(height: 10),
                           Text(
-                            'Camera',
+                            AppStrings.cameraLabel,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -155,7 +156,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                           Icon(Icons.photo_library, size: 36, color: AppTheme.primaryAccent),
                           const SizedBox(height: 10),
                           Text(
-                            'Gallery',
+                            AppStrings.galleryLabel,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -196,14 +197,14 @@ class AddEditExpenseScreen extends StatelessWidget {
                 context.read<ExpenseFormBloc>().add(AutofillFromReceiptEvent(receiptState.result));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Form auto-filled by AI scanner!'),
+                    content: Text(AppStrings.formAutofilledMessage),
                     backgroundColor: AppTheme.secondaryAccent,
                   ),
                 );
               } else if (receiptState is ReceiptScanErrorState) {
                 _showErrorSnackBar(
                   context,
-                  'Scan failed: ${receiptState.message}. You can still fill manually.',
+                  '${AppStrings.scanFailedFallbackMessage}${receiptState.message}${AppStrings.scanFailedSuffix}',
                 );
               }
             },
@@ -215,7 +216,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(isEditing ? 'Transaction updated!' : 'Transaction saved!'),
+                      content: Text(isEditing ? AppStrings.transactionUpdatedMessage : AppStrings.transactionSavedMessage),
                       backgroundColor: AppTheme.secondaryAccent,
                     ),
                   );
@@ -228,7 +229,7 @@ class AddEditExpenseScreen extends StatelessWidget {
 
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text(isEditing ? 'EDIT EXPENSE' : 'ADD EXPENSE'),
+                    title: Text(isEditing ? AppStrings.editExpenseTitle : AppStrings.addExpenseTitle),
                     actions: [
                       if (!isEditing)
                         IconButton(
@@ -279,8 +280,8 @@ class AddEditExpenseScreen extends StatelessWidget {
                                               SizedBox(width: 14),
                                               Expanded(
                                                 child: Text(
-                                                  'Gemini AI is analyzing receipt...',
-                                                  style: TextStyle(
+                                                  AppStrings.aiAnalyzingReceiptMessage,
+                                                  style: const TextStyle(
                                                     color: AppTheme.textPrimary,
                                                     fontSize: 13,
                                                     fontWeight: FontWeight.w500,
@@ -321,7 +322,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
-                                          'Transaction Details',
+                                          AppStrings.transactionDetailsTitle,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -340,7 +341,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                                           textCapitalization: TextCapitalization.words,
                                           style: const TextStyle(color: AppTheme.textPrimary),
                                           decoration: const InputDecoration(
-                                            labelText: 'Merchant Name',
+                                            labelText: AppStrings.merchantNameLabel,
                                             prefixIcon: Icon(
                                               Icons.storefront,
                                               color: AppTheme.textSecondary,
@@ -362,7 +363,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                                           ),
                                           style: const TextStyle(color: AppTheme.textPrimary),
                                           decoration: const InputDecoration(
-                                            labelText: 'Amount (₹)',
+                                            labelText: AppStrings.amountLabel,
                                             prefixIcon: Icon(
                                               Icons.currency_rupee,
                                               color: AppTheme.textSecondary,
@@ -420,7 +421,7 @@ class AddEditExpenseScreen extends StatelessWidget {
 
                                   // Categories Selection
                                   const Text(
-                                    'Category Selection',
+                                    AppStrings.categorySelectionTitle,
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -487,7 +488,7 @@ class AddEditExpenseScreen extends StatelessWidget {
                                           maxLines: 2,
                                           style: const TextStyle(color: AppTheme.textPrimary),
                                           decoration: const InputDecoration(
-                                            labelText: 'Notes (Optional)',
+                                            labelText: AppStrings.notesOptionalLabel,
                                             prefixIcon: Icon(
                                               Icons.notes,
                                               color: AppTheme.textSecondary,
@@ -524,8 +525,8 @@ class AddEditExpenseScreen extends StatelessWidget {
                                           : const Icon(Icons.check),
                                       label: Text(
                                         state.isSubmitting
-                                            ? 'Saving...'
-                                            : (isEditing ? 'Update Transaction' : 'Save Transaction'),
+                                            ? AppStrings.savingLabel
+                                            : (isEditing ? AppStrings.updateTransactionLabel : AppStrings.saveTransactionLabel),
                                       ),
                                     ),
                                   ),

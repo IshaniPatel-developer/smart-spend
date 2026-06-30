@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
@@ -22,7 +23,7 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SMARTSPEND'),
+        title: const Text(AppStrings.dashboardTitle),
       ),
       body: AppTheme.radialGradientBackground(
         child: SafeArea(
@@ -43,7 +44,7 @@ class DashboardScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () => context.read<ExpenseBloc>().add(LoadExpensesEvent()),
-                        child: const Text('Retry'),
+                        child: const Text(AppStrings.retryLabel),
                       ),
                     ],
                   ),
@@ -90,10 +91,11 @@ class DashboardScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Welcome Back',
+                                AppStrings.welcomeBackLabel,
                                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       letterSpacing: -0.5,
+                                      color: AppTheme.textPrimary,
                                     ),
                               ),
                             ],
@@ -125,7 +127,7 @@ class DashboardScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _statWidget(
-                                label: 'Total Spent',
+                                label: AppStrings.totalSpentLabel,
                                 valueWidget: RupeeAmountText(
                                   amount: grandTotal,
                                   style: const TextStyle(
@@ -140,7 +142,7 @@ class DashboardScreen extends StatelessWidget {
                             Container(width: 1, height: 40, color: AppTheme.borderLight),
                             Expanded(
                               child: _statWidget(
-                                label: 'Largest purchase',
+                                label: AppStrings.largestPurchaseLabel,
                                 valueWidget: RupeeAmountText(
                                   amount: maxAmount,
                                   style: const TextStyle(
@@ -156,7 +158,7 @@ class DashboardScreen extends StatelessWidget {
                             Container(width: 1, height: 40, color: AppTheme.borderLight),
                             Expanded(
                               child: _statWidget(
-                                label: 'Transactions',
+                                label: AppStrings.transactionsLabel,
                                 valueWidget: Text(
                                   '${expenses.length}',
                                   style: const TextStyle(
@@ -192,7 +194,7 @@ class DashboardScreen extends StatelessWidget {
                                 side: const BorderSide(color: AppTheme.borderLight, width: 1.5),
                               ),
                               icon: const Icon(Icons.add, color: AppTheme.primaryAccent),
-                              label: const Text('Add Expense'),
+                              label: const Text(AppStrings.addExpenseButton),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -200,7 +202,7 @@ class DashboardScreen extends StatelessWidget {
                             child: ElevatedButton.icon(
                               onPressed: () => context.read<ExpenseBloc>().showScanReceiptSheet(context),
                               icon: const Icon(Icons.document_scanner),
-                              label: const Text('Scan Receipt'),
+                              label: const Text(AppStrings.scanReceiptButton),
                             ),
                           ),
                         ],
@@ -247,16 +249,16 @@ class DashboardScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Get AI Spending Insights',
-                                      style: TextStyle(
+                                      AppStrings.aiInsightsBannerTitle,
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
                                       ),
                                     ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      'Analyze categories, trends and recommendations.',
+                                    const SizedBox(height: 4),
+                                    const Text(
+                                      AppStrings.aiInsightsBannerSub,
                                       style: TextStyle(
                                         color: Colors.white70,
                                         fontSize: 12,
@@ -285,14 +287,15 @@ class DashboardScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Expense History',
+                            AppStrings.expenseHistoryHeader,
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
+                                  color: AppTheme.textPrimary,
                                 ),
                           ),
                           if (expenses.isNotEmpty)
                             const Text(
-                              'Swipe left to delete',
+                              AppStrings.swipeToDeleteHint,
                               style: TextStyle(
                                 fontSize: 11,
                                 color: AppTheme.textSecondary,
@@ -312,7 +315,7 @@ class DashboardScreen extends StatelessWidget {
                                     Icon(Icons.receipt, size: 48, color: AppTheme.textSecondary.withOpacity(0.5)),
                                     const SizedBox(height: 12),
                                     const Text(
-                                      'No expenses yet. Add or scan one above!',
+                                      AppStrings.emptyHistoryMessage,
                                       style: TextStyle(color: AppTheme.textSecondary),
                                     ),
                                   ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../expense_management/domain/entities/expense.dart';
 import '../bloc/insights_bloc.dart';
 import '../bloc/insights_event.dart';
@@ -19,7 +20,7 @@ class InsightsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI SPENDING INSIGHTS'),
+        title: const Text(AppStrings.insightsTitle),
       ),
       body: AppTheme.radialGradientBackground(
         child: SafeArea(
@@ -82,9 +83,9 @@ class InsightsScreen extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      'AI Recommendation',
-                                      style: TextStyle(
+                                    Text(
+                                      AppStrings.aiRecommendationTitle,
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
@@ -114,7 +115,7 @@ class InsightsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Structured Metrics',
+                                AppStrings.structuredMetricsTitle,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -123,7 +124,7 @@ class InsightsScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               _buildStatRow(
-                                'Total Expenses',
+                                AppStrings.totalExpensesMetricLabel,
                                 RupeeAmountText(
                                   amount: insights.totalSpending,
                                   style: const TextStyle(
@@ -135,9 +136,9 @@ class InsightsScreen extends StatelessWidget {
                                 AppTheme.cyanAccent,
                               ),
                               const Divider(height: 20),
-                              _buildStatRow('Largest Single Spend', insights.largestExpense, AppTheme.textPrimary),
+                              _buildStatRow(AppStrings.largestSingleSpendMetricLabel, insights.largestExpense, AppTheme.textPrimary),
                               const Divider(height: 20),
-                              _buildStatRow('General Trend', insights.spendingTrends, AppTheme.textSecondary, isLongText: true),
+                              _buildStatRow(AppStrings.generalTrendMetricLabel, insights.spendingTrends, AppTheme.textSecondary, isLongText: true),
                             ],
                           ),
                         ),
@@ -153,7 +154,7 @@ class InsightsScreen extends StatelessWidget {
                         const Padding(
                           padding: EdgeInsets.only(left: 4.0, bottom: 10),
                           child: Text(
-                            'AI Financial Report',
+                            AppStrings.aiReportTitle,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -179,7 +180,7 @@ class InsightsScreen extends StatelessWidget {
                               context.read<InsightsBloc>().add(GenerateInsightsEvent(expenses));
                             },
                             icon: const Icon(Icons.refresh, color: AppTheme.cyanAccent),
-                            label: const Text('Refresh AI Report', style: TextStyle(color: AppTheme.cyanAccent)),
+                            label: const Text(AppStrings.refreshReportButton, style: TextStyle(color: AppTheme.cyanAccent)),
                           ),
                         ),
                       ],
@@ -247,7 +248,7 @@ class InsightsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             const Text(
-              'No Insights Generated Yet',
+              AppStrings.noInsightsTitle,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -256,7 +257,7 @@ class InsightsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Click the button below to generate a natural-language spending report based on your history.',
+              AppStrings.noInsightsDescription,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
@@ -271,12 +272,12 @@ class InsightsScreen extends StatelessWidget {
                       context.read<InsightsBloc>().add(GenerateInsightsEvent(expenses));
                     },
               icon: const Icon(Icons.rocket_launch),
-              label: const Text('Generate AI Report'),
+              label: const Text(AppStrings.generateAiReportButton),
             ),
             if (expenses.isEmpty) ...[
               const SizedBox(height: 12),
               const Text(
-                'Please add at least one expense to analyze.',
+                AppStrings.addExpenseToAnalyzeMessage,
                 style: TextStyle(color: AppTheme.dangerAccent, fontSize: 12),
               ),
             ]
@@ -296,7 +297,7 @@ class InsightsScreen extends StatelessWidget {
             const CircularProgressIndicator(color: AppTheme.primaryAccent),
             const SizedBox(height: 24),
             const Text(
-              'Analyzing Spending Patterns...',
+              AppStrings.analyzingSpendingTitle,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -304,12 +305,12 @@ class InsightsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'AI is calculating trends and generating recommendations...',
+            const Text(
+              AppStrings.analyzingSpendingSub,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,
-                color: AppTheme.textSecondary.withOpacity(0.8),
+                color: AppTheme.textSecondary,
               ),
             ),
           ],
@@ -332,7 +333,7 @@ class InsightsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Failed to Generate Insights',
+              AppStrings.failedGenerateInsightsTitle,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -354,7 +355,7 @@ class InsightsScreen extends StatelessWidget {
                 context.read<InsightsBloc>().add(GenerateInsightsEvent(expenses));
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              label: const Text(AppStrings.tryAgainButton),
             ),
           ],
         ),
