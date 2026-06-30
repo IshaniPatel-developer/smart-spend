@@ -45,7 +45,7 @@ class InsightsRepositoryImpl implements InsightsRepository {
     }
 
     final largestExpenseStr = largest != null
-        ? '${largest.merchantName} (\$${largest.amount.toStringAsFixed(2)}) on ${largest.date.toIso8601String().split('T').first}'
+        ? '${largest.merchantName} (₹${largest.amount.toStringAsFixed(2)}) on ${largest.date.toIso8601String().split('T').first}'
         : 'None';
 
     final reportMarkdown = response['reportMarkdown']?.toString() ?? 'Failed to generate markdown report.';

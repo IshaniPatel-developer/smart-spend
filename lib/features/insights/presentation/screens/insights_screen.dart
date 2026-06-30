@@ -7,6 +7,7 @@ import '../bloc/insights_event.dart';
 import '../bloc/insights_state.dart';
 import '../../../expense_management/presentation/widgets/glass_card.dart';
 import '../../../expense_management/presentation/widgets/category_chart.dart';
+import '../../../expense_management/presentation/widgets/rupee_amount_text.dart';
 import '../widgets/markdown_report_view.dart';
 
 class InsightsScreen extends StatelessWidget {
@@ -121,7 +122,18 @@ class InsightsScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              _buildStatRow('Total Expenses', '\$${insights.totalSpending.toStringAsFixed(2)}', AppTheme.cyanAccent),
+                              _buildStatRow(
+                                'Total Expenses',
+                                RupeeAmountText(
+                                  amount: insights.totalSpending,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.cyanAccent,
+                                  ),
+                                ),
+                                AppTheme.cyanAccent,
+                              ),
                               const Divider(height: 20),
                               _buildStatRow('Largest Single Spend', insights.largestExpense, AppTheme.textPrimary),
                               const Divider(height: 20),
@@ -186,7 +198,7 @@ class InsightsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(String label, String value, Color valueColor, {bool isLongText = false}) {
+  Widget _buildStatRow(String label, dynamic value, Color valueColor, {bool isLongText = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -199,14 +211,17 @@ class InsightsScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: isLongText ? 13 : 15,
-            fontWeight: isLongText ? FontWeight.normal : FontWeight.bold,
-            color: valueColor,
+        if (value is Widget)
+          value
+        else
+          Text(
+            value.toString(),
+            style: TextStyle(
+              fontSize: isLongText ? 13 : 15,
+              fontWeight: isLongText ? FontWeight.normal : FontWeight.bold,
+              color: valueColor,
+            ),
           ),
-        ),
       ],
     );
   }

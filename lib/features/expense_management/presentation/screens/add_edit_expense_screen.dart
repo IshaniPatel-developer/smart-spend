@@ -356,9 +356,9 @@ class AddEditExpenseScreen extends StatelessWidget {
                                           ),
                                           style: const TextStyle(color: AppTheme.textPrimary),
                                           decoration: const InputDecoration(
-                                            labelText: 'Amount (\$)',
+                                            labelText: 'Amount (₹)',
                                             prefixIcon: Icon(
-                                              Icons.attach_money,
+                                              Icons.currency_rupee,
                                               color: AppTheme.textSecondary,
                                             ),
                                           ),

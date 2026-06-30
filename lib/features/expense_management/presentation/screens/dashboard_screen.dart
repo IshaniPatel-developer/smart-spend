@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../core/theme/theme.dart';
-import '../../../../core/utils/formatters.dart';
 import '../bloc/expense_bloc.dart';
 import '../bloc/expense_event.dart';
 import '../bloc/expense_state.dart';
@@ -12,6 +11,7 @@ import '../../../receipt_scanner/presentation/bloc/receipt_event.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/category_chart.dart';
 import '../widgets/expense_list_item.dart';
+import '../widgets/rupee_amount_text.dart';
 import 'add_edit_expense_screen.dart';
 import '../../../insights/presentation/screens/insights_screen.dart';
 
@@ -252,7 +252,14 @@ class DashboardScreen extends StatelessWidget {
                             Expanded(
                               child: _statWidget(
                                 label: 'Total Spent',
-                                value: Formatters.formatCurrency(grandTotal),
+                                valueWidget: RupeeAmountText(
+                                  amount: grandTotal,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.cyanAccent,
+                                  ),
+                                ),
                                 color: AppTheme.cyanAccent,
                               ),
                             ),
@@ -260,7 +267,14 @@ class DashboardScreen extends StatelessWidget {
                             Expanded(
                               child: _statWidget(
                                 label: 'Largest purchase',
-                                value: maxAmount > 0 ? Formatters.formatCurrency(maxAmount) : '\$0.00',
+                                valueWidget: RupeeAmountText(
+                                  amount: maxAmount,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.primaryAccent,
+                                  ),
+                                ),
                                 subtext: maxAmount > 0 ? largestMerchant : null,
                                 color: AppTheme.primaryAccent,
                               ),
@@ -269,7 +283,14 @@ class DashboardScreen extends StatelessWidget {
                             Expanded(
                               child: _statWidget(
                                 label: 'Transactions',
-                                value: '${expenses.length}',
+                                valueWidget: Text(
+                                  '${expenses.length}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.secondaryAccent,
+                                  ),
+                                ),
                                 color: AppTheme.secondaryAccent,
                               ),
                             ),
@@ -466,7 +487,7 @@ class DashboardScreen extends StatelessWidget {
 
   Widget _statWidget({
     required String label,
-    required String value,
+    required Widget valueWidget,
     String? subtext,
     required Color color,
   }) {
@@ -482,14 +503,7 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
+        valueWidget,
         if (subtext != null) ...[
           const SizedBox(height: 2),
           Text(

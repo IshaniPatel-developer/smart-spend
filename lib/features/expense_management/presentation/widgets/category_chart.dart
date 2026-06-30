@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/theme/theme.dart';
+import '../widgets/rupee_amount_text.dart';
 import '../../domain/entities/expense.dart';
 
 class CategoryChart extends StatelessWidget {
@@ -92,13 +93,25 @@ class CategoryChart extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              '\$${grandTotal.toStringAsFixed(2)} Total',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.cyanAccent,
-              ),
+            Row(
+              children: [
+                RupeeAmountText(
+                  amount: grandTotal,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.cyanAccent,
+                  ),
+                ),
+                const Text(
+                  ' Total',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.cyanAccent,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -132,8 +145,8 @@ class CategoryChart extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      '\$${amount.toStringAsFixed(2)}',
+                    RupeeAmountText(
+                      amount: amount,
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,

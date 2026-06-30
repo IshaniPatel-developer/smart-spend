@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../../core/utils/formatters.dart';
 import '../../domain/entities/expense.dart';
+import 'rupee_amount_text.dart';
 
 class ExpenseListItem extends StatelessWidget {
   final Expense expense;
@@ -78,7 +80,7 @@ class ExpenseListItem extends StatelessWidget {
             backgroundColor: AppTheme.obsidianCard,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: const Text('Delete Expense?', style: TextStyle(fontWeight: FontWeight.bold)),
-            content: Text('Are you sure you want to remove this expense of \$${expense.amount.toStringAsFixed(2)} at ${expense.merchantName}?'),
+            content: Text('Are you sure you want to remove this expense of ${Formatters.formatRupee(expense.amount)} at ${expense.merchantName}?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -183,8 +185,8 @@ class ExpenseListItem extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      '\$${expense.amount.toStringAsFixed(2)}',
+                    RupeeAmountText(
+                      amount: expense.amount,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

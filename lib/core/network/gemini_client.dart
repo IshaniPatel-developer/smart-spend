@@ -169,7 +169,7 @@ class GeminiClient {
     buffer.writeln("Analyze the following list of saved user expenses:");
     buffer.writeln("ID | Date | Merchant | Amount | Category | Notes");
     for (final exp in expenses) {
-      buffer.writeln("${exp['id']} | ${exp['date']} | ${exp['merchant_name']} | \$${exp['amount']} | ${exp['category']} | ${exp['notes'] ?? ''}");
+      buffer.writeln("${exp['id']} | ${exp['date']} | ${exp['merchant_name']} | ₹${exp['amount']} | ${exp['category']} | ${exp['notes'] ?? ''}");
     }
     buffer.writeln("\nPlease generate a spending analysis report.");
     buffer.writeln("You must respond ONLY with a JSON object matching this schema:");
