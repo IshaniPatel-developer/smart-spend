@@ -154,11 +154,13 @@ class ExpenseFormBloc extends Bloc<ExpenseFormEvent, ExpenseFormState> {
 
   // UI helpers inside ExpenseFormBloc
   Future<void> selectDate(BuildContext context, DateTime currentDate) async {
+    final now = DateTime.now();
+    final initial = currentDate.isAfter(now) ? now : currentDate;
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: currentDate,
+      initialDate: initial,
       firstDate: DateTime(2020),
-      lastDate: DateTime(2101),
+      lastDate: now,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
