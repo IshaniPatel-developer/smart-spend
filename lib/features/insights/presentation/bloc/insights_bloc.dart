@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/network_info.dart';
+import '../../../../core/utils/error_handler.dart';
 import '../../domain/usecases/generate_insights_usecase.dart';
 import 'insights_event.dart';
 import 'insights_state.dart';
@@ -29,7 +30,7 @@ class InsightsBloc extends Bloc<InsightsEvent, InsightsState> {
       final insights = await _generateInsights(event.expenses);
       emit(InsightsGeneratedState(insights));
     } catch (e) {
-      emit(InsightsErrorState(e.toString()));
+      emit(InsightsErrorState(ErrorHandler.getReadableErrorMessage(e)));
     }
   }
 
