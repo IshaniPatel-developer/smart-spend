@@ -95,6 +95,8 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
               },
               builder: (context, state) {
                 final formattedDate = Formatters.formatDate(state.date);
+                final receiptState = context.watch<ReceiptBloc>().state;
+                final isScanning = receiptState is ReceiptScanningState;
 
                 return Scaffold(
                   appBar: AppBar(
@@ -106,7 +108,9 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             Icons.document_scanner,
                             color: AppTheme.cyanAccent,
                           ),
-                          onPressed: () => context.read<ExpenseFormBloc>().showImagePickerSourceSelector(context),
+                          onPressed: isScanning
+                              ? null
+                              : () => context.read<ExpenseFormBloc>().showImagePickerSourceSelector(context),
                         ),
                     ],
                   ),
@@ -204,6 +208,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                         TextFormField(
                                           key: ValueKey('merchant_${state.autofillSessionId}'),
                                           initialValue: state.merchantName,
+                                          enabled: !isScanning,
                                           onChanged: (val) => context
                                               .read<ExpenseFormBloc>()
                                               .add(UpdateMerchantEvent(val)),
@@ -224,6 +229,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                         TextFormField(
                                           key: ValueKey('amount_${state.autofillSessionId}'),
                                           initialValue: state.amount != null ? state.amount.toString() : '',
+                                          enabled: !isScanning,
                                           onChanged: (val) => context
                                               .read<ExpenseFormBloc>()
                                               .add(UpdateAmountEvent(double.tryParse(val))),
@@ -244,42 +250,47 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
 
                                         // Date Field
                                         InkWell(
-                                          onTap: () => context.read<ExpenseFormBloc>().selectDate(context, state.date),
+                                          onTap: isScanning
+                                              ? null
+                                              : () => context.read<ExpenseFormBloc>().selectDate(context, state.date),
                                           borderRadius: BorderRadius.circular(16),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 18,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: AppTheme.glassCardFill,
-                                              borderRadius: BorderRadius.circular(16),
-                                              border: Border.all(
-                                                color: AppTheme.borderLight,
-                                                width: 1.5,
+                                          child: Opacity(
+                                            opacity: isScanning ? 0.6 : 1.0,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                                vertical: 18,
                                               ),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.calendar_today,
-                                                  color: AppTheme.textSecondary,
-                                                  size: 20,
+                                              decoration: BoxDecoration(
+                                                color: AppTheme.glassCardFill,
+                                                borderRadius: BorderRadius.circular(16),
+                                                border: Border.all(
+                                                  color: AppTheme.borderLight,
+                                                  width: 1.5,
                                                 ),
-                                                const SizedBox(width: 12),
-                                                Text(
-                                                  formattedDate,
-                                                  style: const TextStyle(
-                                                    color: AppTheme.textPrimary,
-                                                    fontSize: 15,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.calendar_today,
+                                                    color: AppTheme.textSecondary,
+                                                    size: 20,
                                                   ),
-                                                ),
-                                                const Spacer(),
-                                                const Icon(
-                                                  Icons.arrow_drop_down,
-                                                  color: AppTheme.textSecondary,
-                                                ),
-                                              ],
+                                                  const SizedBox(width: 12),
+                                                  Text(
+                                                    formattedDate,
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textPrimary,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  const Spacer(),
+                                                  const Icon(
+                                                    Icons.arrow_drop_down,
+                                                    color: AppTheme.textSecondary,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -305,53 +316,58 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                         sortedCategories.remove(state.category);
                                         sortedCategories.insert(0, state.category);
                                       }
-                                      return SizedBox(
-                                        height: 48,
-                                        child: ListView.separated(
-                                          controller: _scrollController,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: sortedCategories.length,
-                                          separatorBuilder: (_, __) => const SizedBox(width: 8),
-                                          itemBuilder: (context, index) {
-                                            final cat = sortedCategories[index];
-                                            final isSelected = state.category == cat;
+                                      return Opacity(
+                                        opacity: isScanning ? 0.6 : 1.0,
+                                        child: SizedBox(
+                                          height: 48,
+                                          child: ListView.separated(
+                                            controller: _scrollController,
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: sortedCategories.length,
+                                            separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                            itemBuilder: (context, index) {
+                                              final cat = sortedCategories[index];
+                                              final isSelected = state.category == cat;
 
-                                            return ChoiceChip(
-                                              label: Text(cat),
-                                              selected: isSelected,
-                                              onSelected: (selected) {
-                                                if (selected) {
-                                                  context
-                                                      .read<ExpenseFormBloc>()
-                                                      .add(UpdateCategoryEvent(cat));
-                                                  _scrollController.animateTo(
-                                                    0.0,
-                                                    duration: const Duration(milliseconds: 300),
-                                                    curve: Curves.easeOut,
-                                                  );
-                                                }
-                                              },
-                                              selectedColor: AppTheme.primaryAccent,
-                                              backgroundColor: AppTheme.glassCardFill,
-                                              labelStyle: TextStyle(
-                                                color: isSelected
-                                                    ? Colors.white
-                                                    : AppTheme.textSecondary,
-                                                fontWeight: isSelected
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12),
-                                                side: BorderSide(
+                                              return ChoiceChip(
+                                                label: Text(cat),
+                                                selected: isSelected,
+                                                onSelected: isScanning
+                                                    ? null
+                                                    : (selected) {
+                                                        if (selected) {
+                                                          context
+                                                              .read<ExpenseFormBloc>()
+                                                              .add(UpdateCategoryEvent(cat));
+                                                          _scrollController.animateTo(
+                                                            0.0,
+                                                            duration: const Duration(milliseconds: 300),
+                                                            curve: Curves.easeOut,
+                                                          );
+                                                        }
+                                                      },
+                                                selectedColor: AppTheme.primaryAccent,
+                                                backgroundColor: AppTheme.glassCardFill,
+                                                labelStyle: TextStyle(
                                                   color: isSelected
-                                                      ? AppTheme.primaryAccent
-                                                      : AppTheme.borderLight,
-                                                  width: 1.5,
+                                                      ? Colors.white
+                                                      : AppTheme.textSecondary,
+                                                  fontWeight: isSelected
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
                                                 ),
-                                              ),
-                                            );
-                                          },
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  side: BorderSide(
+                                                    color: isSelected
+                                                        ? AppTheme.primaryAccent
+                                                        : AppTheme.borderLight,
+                                                    width: 1.5,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       );
                                     },
@@ -366,6 +382,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                         TextFormField(
                                           key: ValueKey('notes_${state.autofillSessionId}'),
                                           initialValue: state.notes,
+                                          enabled: !isScanning,
                                           onChanged: (val) => context
                                               .read<ExpenseFormBloc>()
                                               .add(UpdateNotesEvent(val)),
@@ -388,7 +405,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton.icon(
-                                      onPressed: state.isSubmitting
+                                      onPressed: (state.isSubmitting || isScanning)
                                           ? null
                                           : () {
                                               if (_formKey.currentState!.validate()) {
