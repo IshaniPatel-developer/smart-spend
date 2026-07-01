@@ -1,5 +1,6 @@
-# Template for local.properties
-# Copy this file to 'local.properties' in the same folder and insert your actual Google AI Studio Gemini API key.
-
-# Do NOT commit your actual local.properties to source control.
+sdk.dir=/path/to/android/sdk
+flutter.sdk=/path/to/flutter
+flutter.buildMode=release
+flutter.versionName=1.0.0
+flutter.versionCode=1
 GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
