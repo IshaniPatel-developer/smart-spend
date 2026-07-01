@@ -10,7 +10,7 @@ class AppStrings {
 
   // Dashboard Screen
   static const String dashboardTitle = 'SMARTSPEND';
-  static const String welcomeBackLabel = 'Welcome Back';
+  static const String welcomeBackLabel = 'Welcome';
   static const String retryLabel = 'Retry';
   static const String totalSpentLabel = 'Total Spent';
   static const String largestPurchaseLabel = 'Largest purchase';
