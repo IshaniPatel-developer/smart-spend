@@ -114,63 +114,22 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                         ),
                     ],
                   ),
-                  body: AppTheme.radialGradientBackground(
-                    child: SafeArea(
-                      child: Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 800.0),
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Form(
-                              key: _formKey,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // AI Scanning Status Box
-                                  BlocBuilder<ReceiptBloc, ReceiptState>(
-                                    builder: (context, receiptState) {
-                                      if (receiptState is ReceiptScanningState) {
-                                        return Container(
-                                          margin: const EdgeInsets.only(bottom: 20),
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.primaryAccent.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(16),
-                                            border: Border.all(
-                                              color: AppTheme.primaryAccent.withOpacity(0.3),
-                                            ),
-                                          ),
-                                          child: const Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 20,
-                                                height: 20,
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  color: AppTheme.primaryAccent,
-                                                ),
-                                              ),
-                                              SizedBox(width: 14),
-                                              Expanded(
-                                                child: Text(
-                                                  AppStrings.aiAnalyzingReceiptMessage,
-                                                  style: const TextStyle(
-                                                    color: AppTheme.textPrimary,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                      return const SizedBox.shrink();
-                                    },
-                                  ),
-
-                                  // Receipt Image Preview
+                  body: Stack(
+                    children: [
+                      AppTheme.radialGradientBackground(
+                        child: SafeArea(
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 800.0),
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Form(
+                                  key: _formKey,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // Receipt Image Preview
                                   if (state.imagePath != null) ...[
                                     Container(
                                       height: 200,
@@ -439,6 +398,37 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                         ),
                       ),
                     ),
+                  ),
+                  if (isScanning)
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.black.withOpacity(0.65),
+                            child: Center(
+                              child: GlassCard(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 28.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const CircularProgressIndicator(color: AppTheme.primaryAccent),
+                                      const SizedBox(height: 24),
+                                      const Text(
+                                        AppStrings.aiAnalyzingReceiptMessage,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: AppTheme.textPrimary,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 );
               },
