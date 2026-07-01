@@ -3,7 +3,8 @@ class AppStrings {
   static const String appName = 'SMARTSPEND';
   static const String dollar = '\$';
   static const String rupee = '₹';
-  static const String noInternetConnectionMessage = 'No internet connection. Please check your connectivity and try again.';
+  static const String noInternetConnectionMessage =
+      'No internet connection. Please check your connectivity and try again.';
 
   // Splash Screen
   static const String splashTagline = 'AI-Powered Expense Management';
@@ -15,19 +16,23 @@ class AppStrings {
   static const String totalSpentLabel = 'Total Spent';
   static const String largestPurchaseLabel = 'Largest purchase';
   static const String transactionsLabel = 'Transactions';
-  static const String emptyExpensesMessage = 'No expenses recorded yet. Start by scanning a receipt or adding one manually!';
+  static const String emptyExpensesMessage =
+      'No expenses recorded yet. Start by scanning a receipt or adding one manually!';
   static const String addExpenseButton = 'Add Expense';
   static const String scanReceiptButton = 'Scan Receipt';
   static const String aiInsightsBannerTitle = 'Get AI Spending Insights';
-  static const String aiInsightsBannerSub = 'Analyze categories, trends and recommendations.';
+  static const String aiInsightsBannerSub =
+      'Analyze categories, trends and recommendations.';
   static const String recentExpensesTitle = 'Recent Expenses';
   static const String expenseHistoryHeader = 'Expense History';
   static const String swipeToDeleteHint = 'Swipe left to delete';
-  static const String emptyHistoryMessage = 'No expenses yet. Add or scan one above!';
-  
+  static const String emptyHistoryMessage =
+      'No expenses yet. Add or scan one above!';
+
   // Dialogs
   static const String deleteExpenseTitle = 'Delete Expense?';
-  static const String deleteExpenseConfirmBase = 'Are you sure you want to remove this expense of ';
+  static const String deleteExpenseConfirmBase =
+      'Are you sure you want to remove this expense of ';
   static const String deleteExpenseConfirmAt = ' at ';
   static const String deleteExpenseConfirmQuestion = '?';
   static const String cancelLabel = 'Cancel';
@@ -52,11 +57,11 @@ class AppStrings {
   static const String updateTransactionLabel = 'Update Transaction';
   static const String transactionSavedMessage = 'Transaction saved!';
   static const String transactionUpdatedMessage = 'Transaction updated!';
-  static const String aiAnalyzingReceiptMessage = 'Gemini AI is analyzing receipt...';
+  static const String aiAnalyzingReceiptMessage = 'AI is analyzing receipt...';
   static const String formAutofilledMessage = 'Form auto-filled by AI scanner!';
   static const String scanFailedFallbackMessage = 'Scan failed: ';
   static const String scanFailedSuffix = '. You can still fill manually.';
-  
+
   // Insights Screen
   static const String insightsTitle = 'SPENDING INSIGHTS';
   static const String aiRecommendationTitle = 'AI Recommendation';
@@ -66,15 +71,19 @@ class AppStrings {
   static const String generalTrendMetricLabel = 'General Trend';
   static const String aiReportTitle = 'AI Financial Report';
   static const String refreshReportButton = 'Refresh AI Report';
-  
+
   // Insights Screen Empty / Loading / Error
   static const String noInsightsTitle = 'No Insights Generated Yet';
-  static const String noInsightsDescription = 'Click the button below to generate a natural-language spending report based on your history.';
+  static const String noInsightsDescription =
+      'Click the button below to generate a natural-language spending report based on your history.';
   static const String generateAiReportButton = 'Generate AI Report';
-  static const String addExpenseToAnalyzeMessage = 'Please add at least one expense to analyze.';
+  static const String addExpenseToAnalyzeMessage =
+      'Please add at least one expense to analyze.';
   static const String analyzingSpendingTitle = 'Analyzing Spending Patterns...';
-  static const String analyzingSpendingSub = 'AI is calculating trends and generating recommendations...';
-  static const String failedGenerateInsightsTitle = 'Failed to Generate Insights';
+  static const String analyzingSpendingSub =
+      'AI is calculating trends and generating recommendations...';
+  static const String failedGenerateInsightsTitle =
+      'Failed to Generate Insights';
   static const String tryAgainButton = 'Try Again';
 
   // Categories
