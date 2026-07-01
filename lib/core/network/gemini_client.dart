@@ -115,7 +115,11 @@ class GeminiClient {
         {
           "parts": [
             {
-              "text": "You are a receipt scanning assistant. Extract the following fields from the receipt image: merchantName, date, amount, category.\n"
+              "text": "You are a receipt scanning assistant. First check if the image is actually a receipt. If it is NOT a receipt (e.g. it is a person, landscape, object, document other than a receipt, or arbitrary image), return this JSON object exactly:\n"
+                  "{\n"
+                  "  \"error\": \"not_a_receipt\"\n"
+                  "}\n"
+                  "Otherwise, extract the following fields from the receipt image: merchantName, date, amount, category.\n"
                   "Return ONLY a valid JSON object matching this schema:\n"
                   "{\n"
                   "  \"merchantName\": \"string\",\n"
@@ -164,11 +168,48 @@ class GeminiClient {
         throw Exception('Empty response from Gemini model.');
       }
 
-      // Parse extracted JSON content
+      // Parse and sanitize extracted JSON content
       try {
-        return _cleanAndParseJson(rawText);
+        final parsed = _cleanAndParseJson(rawText);
+        if (parsed.containsKey('error') && parsed['error'] == 'not_a_receipt') {
+          throw Exception('The image does not appear to be a valid receipt. Please scan a valid receipt.');
+        }
+
+        final sanitized = <String, dynamic>{};
+        sanitized['merchantName'] = parsed['merchantName']?.toString() ?? 'Unknown';
+
+        double amountVal = 0.0;
+        if (parsed['amount'] != null) {
+          final amt = parsed['amount'];
+          if (amt is num) {
+            amountVal = amt.toDouble();
+          } else {
+            amountVal = double.tryParse(amt.toString()) ?? 0.0;
+          }
+        }
+        sanitized['amount'] = amountVal;
+
+        String dateStr = parsed['date']?.toString() ?? '';
+        try {
+          DateTime.parse(dateStr);
+        } catch (_) {
+          dateStr = DateTime.now().toIso8601String().split('T').first;
+        }
+        sanitized['date'] = dateStr;
+
+        final allowedCategories = ['Food', 'Shopping', 'Travel', 'Utilities', 'Entertainment', 'Others'];
+        String categoryStr = parsed['category']?.toString() ?? 'Others';
+        if (!allowedCategories.contains(categoryStr)) {
+          categoryStr = 'Others';
+        }
+        sanitized['category'] = categoryStr;
+
+        return sanitized;
       } catch (e) {
-        throw Exception('Failed to parse Gemini response as JSON. Response was: $rawText');
+        if (e.toString().contains('does not appear to be a valid receipt')) {
+          rethrow;
+        }
+        throw Exception('Failed to process receipt image. Please verify it is a valid receipt and try again.');
       }
     } else {
       throw Exception('Gemini API request failed with status: ${response.statusCode}');
