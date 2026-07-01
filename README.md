@@ -57,6 +57,15 @@ To run the app securely without exposing your API Key:
    ```
 3. The app's native Gradle task will load this key automatically into `BuildConfig` and deliver it dynamically via secure channels.
 
+### 🔑 Generating a Google AI Studio API Key
+If you encounter `401 Unauthorized` or authentication errors, your Gemini API key might be expired. Follow these steps to generate a new key:
+1. Navigate to [Google AI Studio](https://aistudio.google.com/).
+2. Sign in with your Google Account.
+3. Click on the **"Get API Key"** button in the top left sidebar.
+4. Click **"Create API Key"**.
+5. Select a Google Cloud project (or create a new one) and click **"Create API Key in existing project"**.
+6. Copy the generated key and replace the `GEMINI_API_KEY` value in your `android/local.properties` file.
+
 ### 🏃 Running the Application
 
 To run the app on an active Android emulator or physical device:
