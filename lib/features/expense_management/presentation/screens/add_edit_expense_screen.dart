@@ -123,6 +123,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             padding: const EdgeInsets.all(20.0),
                             child: Form(
                               key: _formKey,
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
