@@ -1,0 +1,5 @@
+# Template for local.properties
+# Copy this file to 'local.properties' in the same folder and insert your actual Google AI Studio Gemini API key.
+
+# Do NOT commit your actual local.properties to source control.
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY_HERE
