@@ -2,6 +2,10 @@
 
 Smart Spend is a next-generation expense tracker built with **Flutter** and powered by **Google Gemini AI**. Featuring a stunning glassmorphism design system, it provides instant receipt parsing, spending pattern analysis, and secure credentials management.
 
+## 📱 Demo Video
+Watch the application in action showing the receipt scanner and insights analysis:
+[Watch Demo Video](media/demo_video.mp4)
+
 ---
 
 ## ✨ Features
