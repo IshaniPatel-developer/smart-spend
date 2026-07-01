@@ -400,34 +400,14 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                     ),
                   ),
                   if (isScanning)
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.black.withOpacity(0.65),
-                            child: Center(
-                              child: GlassCard(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 28.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const CircularProgressIndicator(color: AppTheme.primaryAccent),
-                                      const SizedBox(height: 24),
-                                      const Text(
-                                        AppStrings.aiAnalyzingReceiptMessage,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: AppTheme.textPrimary,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                    Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withOpacity(0.65),
+                        child: const Center(
+                          child: CircularProgressIndicator(color: AppTheme.primaryAccent),
                         ),
+                      ),
+                    ),
                     ],
                   ),
                 );
