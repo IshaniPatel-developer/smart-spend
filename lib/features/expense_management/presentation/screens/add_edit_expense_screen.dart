@@ -97,6 +97,9 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 final formattedDate = Formatters.formatDate(state.date);
                 final receiptState = context.watch<ReceiptBloc>().state;
                 final isScanning = receiptState is ReceiptScanningState;
+                final hasValidImage = state.imagePath != null &&
+                    state.imagePath!.isNotEmpty &&
+                    File(state.imagePath!).existsSync();
 
                 return Scaffold(
                   appBar: AppBar(
@@ -130,7 +133,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       // Receipt Image Preview
-                                  if (state.imagePath != null && state.imagePath!.isNotEmpty) ...[
+                                  if (hasValidImage) ...[
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
