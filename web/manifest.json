@@ -1,6 +1,6 @@
 {
-    "name": "smart_spend",
-    "short_name": "smart_spend",
+    "name": "Smart Spend",
+    "short_name": "Smart Spend",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
