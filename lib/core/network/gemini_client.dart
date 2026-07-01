@@ -131,7 +131,7 @@ class GeminiClient {
                   "1. date: Use format YYYY-MM-DD. If year is missing, assume current year 2026. If date is not found, use current date: 2026-06-30.\n"
                   "2. category: Choose exactly one matching the item type: Food, Shopping, Travel, Utilities, Entertainment, Others. If not identifiable, default to Others.\n"
                   "3. merchantName: The vendor/store name.\n"
-                  "4. amount: The total amount paid as a float number. If not found, use 0.0.\n"
+                  "4. amount: The total amount paid as a float number. Convert any foreign currency amount (e.g. USD, EUR, GBP, SGD, etc.) to INR using approximate/current exchange rates. If the amount is already in INR (₹), do not convert it; just return the extracted value. If not found, use 0.0.\n"
                   "Do not wrap JSON in code blocks. Just return the raw JSON object string."
             },
             {
