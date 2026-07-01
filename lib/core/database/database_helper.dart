@@ -56,7 +56,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> queryAllExpenses() async {
     final db = await instance.database;
-    return await db.query('expenses', orderBy: 'date DESC');
+    return await db.query('expenses', orderBy: 'id DESC');
   }
 
   Future<int> updateExpense(Map<String, dynamic> row) async {
