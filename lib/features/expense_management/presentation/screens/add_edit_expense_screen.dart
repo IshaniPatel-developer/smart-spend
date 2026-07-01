@@ -131,18 +131,45 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                     children: [
                                       // Receipt Image Preview
                                   if (state.imagePath != null) ...[
-                                    Container(
-                                      height: 200,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(color: AppTheme.borderLight),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(19),
-                                        child: Image.file(
-                                          File(state.imagePath!),
-                                          fit: BoxFit.cover,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Scaffold(
+                                              backgroundColor: Colors.black,
+                                              appBar: AppBar(
+                                                backgroundColor: Colors.transparent,
+                                                elevation: 0,
+                                                iconTheme: const IconThemeData(color: Colors.white),
+                                              ),
+                                              body: Center(
+                                                child: InteractiveViewer(
+                                                  minScale: 0.5,
+                                                  maxScale: 4.0,
+                                                  child: Image.file(
+                                                    File(state.imagePath!),
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 200,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(color: AppTheme.borderLight),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(19),
+                                          child: Image.file(
+                                            File(state.imagePath!),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
                                     ),
