@@ -130,7 +130,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       // Receipt Image Preview
-                                  if (state.imagePath != null) ...[
+                                  if (state.imagePath != null && state.imagePath!.isNotEmpty) ...[
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
